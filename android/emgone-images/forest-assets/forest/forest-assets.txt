@@ -1,0 +1,138 @@
+forest-assets.png
+size: 1938, 875
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: false
+  xy: 969, 421
+  size: 969, 454
+  orig: 969, 454
+  offset: 0, 0
+  index: -1
+band
+  rotate: false
+  xy: 0, 392
+  size: 1132, 29
+  orig: 1132, 29
+  offset: 0, 0
+  index: -1
+bottom1
+  rotate: false
+  xy: 70, 0
+  size: 145, 91
+  orig: 145, 91
+  offset: 0, 0
+  index: -1
+bottom2
+  rotate: false
+  xy: 1087, 0
+  size: 145, 111
+  orig: 145, 111
+  offset: 0, 0
+  index: -1
+bottom3
+  rotate: false
+  xy: 1377, 0
+  size: 145, 141
+  orig: 145, 141
+  offset: 0, 0
+  index: -1
+bottom4
+  rotate: false
+  xy: 1667, 0
+  size: 145, 181
+  orig: 145, 181
+  offset: 0, 0
+  index: -1
+bottom5
+  rotate: false
+  xy: 145, 181
+  size: 145, 211
+  orig: 145, 211
+  offset: 0, 0
+  index: -1
+floating
+  rotate: false
+  xy: 290, 181
+  size: 969, 129
+  orig: 969, 129
+  offset: 0, 0
+  index: -1
+loicaCrash
+  rotate: false
+  xy: 795, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaCrashTransp
+  rotate: false
+  xy: 941, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaDown
+  rotate: false
+  xy: 215, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaMiddle
+  rotate: false
+  xy: 360, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaUp
+  rotate: false
+  xy: 505, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 0, 421
+  size: 969, 340
+  orig: 969, 340
+  offset: 0, 0
+  index: -1
+top1
+  rotate: false
+  xy: 0, 0
+  size: 70, 91
+  orig: 70, 91
+  offset: 0, 0
+  index: -1
+top2
+  rotate: false
+  xy: 650, 0
+  size: 145, 105
+  orig: 145, 105
+  offset: 0, 0
+  index: -1
+top3
+  rotate: false
+  xy: 1232, 0
+  size: 145, 131
+  orig: 145, 131
+  offset: 0, 0
+  index: -1
+top4
+  rotate: false
+  xy: 1522, 0
+  size: 145, 171
+  orig: 145, 171
+  offset: 0, 0
+  index: -1
+top5
+  rotate: false
+  xy: 0, 181
+  size: 145, 211
+  orig: 145, 211
+  offset: 0, 0
+  index: -1

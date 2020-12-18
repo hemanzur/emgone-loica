@@ -1,0 +1,33 @@
+emgone-images-2.png
+size: 1465, 1247
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+avatar
+  rotate: false
+  xy: 0, 0
+  size: 185, 185
+  orig: 185, 185
+  offset: 0, 0
+  index: -1
+orange-bg-mountains
+  rotate: false
+  xy: 0, 1102
+  size: 640, 145
+  orig: 640, 145
+  offset: 0, 0
+  index: -1
+orange-bg
+  rotate: false
+  xy: 825, 0
+  size: 640, 1102
+  orig: 640, 1102
+  offset: 0, 0
+  index: -1
+purple-bg
+  rotate: false
+  xy: 185, 0
+  size: 640, 1095
+  orig: 640, 1095
+  offset: 0, 0
+  index: -1

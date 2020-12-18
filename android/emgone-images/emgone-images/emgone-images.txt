@@ -1,0 +1,103 @@
+emgone-images.png
+size: 1872, 1471
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cup
+  rotate: false
+  xy: 376, 0
+  size: 40, 49
+  orig: 40, 49
+  offset: 0, 0
+  index: -1
+Fondo_configuracion
+  rotate: false
+  xy: 501, 271
+  size: 651, 1133
+  orig: 651, 1133
+  offset: 0, 0
+  index: -1
+Fondobottom_configuracion
+  rotate: false
+  xy: 1178, 0
+  size: 654, 271
+  orig: 654, 271
+  offset: 0, 0
+  index: -1
+initial-bg
+  rotate: false
+  xy: 1152, 271
+  size: 720, 1200
+  orig: 720, 1200
+  offset: 0, 0
+  index: -1
+logologin
+  rotate: false
+  xy: 938, 0
+  size: 240, 239
+  orig: 240, 239
+  offset: 0, 0
+  index: -1
+logoSplash
+  rotate: false
+  xy: 0, 271
+  size: 501, 501
+  orig: 501, 501
+  offset: 0, 0
+  index: -1
+loica1
+  rotate: false
+  xy: 793, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loica2
+  rotate: false
+  xy: 648, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loica3
+  rotate: false
+  xy: 503, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+max
+  rotate: false
+  xy: 0, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+maxcheck
+  rotate: false
+  xy: 94, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+min
+  rotate: false
+  xy: 282, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+mincheck
+  rotate: false
+  xy: 188, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+profile-01
+  rotate: false
+  xy: 416, 0
+  size: 87, 88
+  orig: 87, 88
+  offset: 0, 0
+  index: -1

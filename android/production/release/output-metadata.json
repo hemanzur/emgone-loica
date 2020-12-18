@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.hachimanzur.loica",
+  "variantName": "processProductionReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 17,
+      "versionName": "1.6.7",
+      "outputFile": "android-production-release.apk"
+    }
+  ]
+}

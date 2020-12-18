@@ -1,0 +1,131 @@
+emgone-images.png
+size: 1994, 1701
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+calibracion_disable
+  rotate: false
+  xy: 1832, 0
+  size: 61, 501
+  orig: 61, 501
+  offset: 0, 0
+  index: -1
+calibracion_enable
+  rotate: false
+  xy: 0, 501
+  size: 61, 501
+  orig: 61, 501
+  offset: 0, 0
+  index: -1
+calibracion_maxonly
+  rotate: false
+  xy: 1893, 0
+  size: 61, 501
+  orig: 61, 501
+  offset: 0, 0
+  index: -1
+calibracion_minonly
+  rotate: false
+  xy: 562, 501
+  size: 61, 501
+  orig: 61, 501
+  offset: 0, 0
+  index: -1
+cup
+  rotate: false
+  xy: 376, 0
+  size: 40, 49
+  orig: 40, 49
+  offset: 0, 0
+  index: -1
+Fondo_configuracion
+  rotate: false
+  xy: 623, 501
+  size: 651, 1133
+  orig: 651, 1133
+  offset: 0, 0
+  index: -1
+Fondobottom_configuracion
+  rotate: false
+  xy: 1178, 0
+  size: 654, 271
+  orig: 654, 271
+  offset: 0, 0
+  index: -1
+initial-bg
+  rotate: false
+  xy: 1274, 501
+  size: 720, 1200
+  orig: 720, 1200
+  offset: 0, 0
+  index: -1
+logologin
+  rotate: false
+  xy: 938, 0
+  size: 240, 239
+  orig: 240, 239
+  offset: 0, 0
+  index: -1
+logoSplash
+  rotate: false
+  xy: 61, 501
+  size: 501, 501
+  orig: 501, 501
+  offset: 0, 0
+  index: -1
+loica1
+  rotate: false
+  xy: 503, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loica2
+  rotate: false
+  xy: 648, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loica3
+  rotate: false
+  xy: 793, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+max
+  rotate: false
+  xy: 282, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+maxcheck
+  rotate: false
+  xy: 0, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+min
+  rotate: false
+  xy: 94, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+mincheck
+  rotate: false
+  xy: 188, 0
+  size: 94, 33
+  orig: 94, 33
+  offset: 0, 0
+  index: -1
+profile-01
+  rotate: false
+  xy: 416, 0
+  size: 87, 88
+  orig: 87, 88
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,439 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	roboto-black-18: {
+		file: roboto-black-18.fnt
+	}
+	roboto-black-24: {
+		file: roboto-black-24.fnt
+	}
+	roboto-black-27: {
+		file: roboto-black-27.fnt
+	}
+	roboto-black-30: {
+		file: roboto-black-30.fnt
+	}
+	roboto-black-36: {
+		file: roboto-black-36.fnt
+	}
+	roboto-black-43: {
+		file: roboto-black-43.fnt
+	}
+	roboto-bold-18: {
+		file: roboto-bold-18.fnt
+	}
+	roboto-bold-23: {
+		file: roboto-bold-23.fnt
+	}
+	roboto-bold-24: {
+		file: roboto-bold-24.fnt
+	}
+	roboto-bold-27: {
+		file: roboto-bold-27.fnt
+	}
+	roboto-bold-28: {
+		file: roboto-bold-28.fnt
+	}
+	roboto-medium-24: {
+		file: roboto-medium-24.fnt
+	}
+	roboto-regular-18: {
+		file: roboto-regular-18.fnt
+	}
+	roboto-regular-21: {
+		file: roboto-regular-21.fnt
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	black: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+	coral: {
+		r: 1
+		g: 0.49803922
+		b: 0.3137255
+		a: 1
+	}
+	gray-edit-profile: {
+		r: 0.21568628
+		g: 0.19607843
+		b: 0.24705882
+		a: 1
+	}
+	gray-purple: {
+		r: 0.5254902
+		g: 0.4862745
+		b: 0.6
+		a: 1
+	}
+	light-grey: {
+		r: 0.6666667
+		g: 0.6666667
+		b: 0.6666667
+		a: 1
+	}
+	purple-label-windiw: {
+		r: 0.41960785
+		g: 0.27058825
+		b: 0.7882353
+		a: 1
+	}
+	score-points: {
+		r: 0.45490196
+		g: 0.7529412
+		b: 0.654902
+		a: 1
+	}
+	select-box: {
+		r: 0.4392157
+		g: 0.42745098
+		b: 0.46666667
+		a: 1
+	}
+	select-box-list: {
+		r: 0.19215687
+		g: 0.23921569
+		b: 0.21960784
+		a: 1
+	}
+	selected-costume-purple: {
+		r: 0.4392157
+		g: 0.19607843
+		b: 0.43529412
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+	default: {
+		checkboxOn: cuadroconticket-01
+		checkboxOff: cuadro-01
+		font: roboto-black-24
+		fontColor: gray-edit-profile
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		imageUp: jugar
+		imageDown: jugar-pressed
+	}
+	edit: {
+		imageUp: editar
+		imageDown: editar-pressed
+	}
+	less: {
+		imageUp: Menos
+		imageDown: menos-pressed
+	}
+	more: {
+		imageUp: Mas
+		imageDown: mas-pressed
+	}
+	edit-picture: {
+		imageUp: editarsolo
+	}
+	next-page: {
+		imageUp: flecha2_historial
+		imageDown: flecha2_historial-pressed
+	}
+	previous-page: {
+		imageUp: flecha1_historial
+		imageDown: flecha1_historial-pressed
+	}
+	city-scenario: {
+		imageUp: scene_2_small
+		imageChecked: scene_2_small
+		imageDisabled: scene_2_bn
+		checked: selected_scene
+	}
+	desert-scenario: {
+		imageUp: scene_1_small
+		imageChecked: scene_1_small
+		imageDisabled: scene_1_small
+		checked: selected_scene
+	}
+	forest-scenario: {
+		imageUp: scene_3_small
+		imageChecked: scene_3_small
+		imageDisabled: scene_3_bn
+		checked: selected_scene
+	}
+	normal-loica: {
+		imageUp: loica1
+		imageChecked: loica1_select
+		imageDisabled: loica1_bn
+	}
+	super-loica: {
+		imageUp: loica2
+		imageChecked: loica2_select
+		imageDisabled: loica2_bn
+	}
+	spartan-loica: {
+		imageUp: loica3
+		imageChecked: loica3_select
+		imageDisabled: loica3_bn
+	}
+	wizard-loica: {
+		imageUp: loica5
+		imageChecked: loica5_select
+		imageDisabled: loica5_bn
+	}
+	queen-loica: {
+		imageUp: loica4
+		imageChecked: loica4_select
+		imageDisabled: loica4_bn
+	}
+	practice-btn: {
+		imageUp: practice_button
+		imageDown: practice_button_pressed
+	}
+	cup: {
+		imageUp: purple-cup
+		imageDisabled: grey-cup
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: roboto-bold-27
+		fontColor: white
+	}
+	max-score: {
+		font: roboto-black-24
+		fontColor: gray-edit-profile
+		background: puntaje
+	}
+	level: {
+		font: roboto-black-36
+		fontColor: gray-edit-profile
+		background: nivel
+	}
+	big-title: {
+		font: roboto-black-36
+		fontColor: gray-edit-profile
+	}
+	sensor-calib-title: {
+		font: roboto-black-24
+		fontColor: gray-edit-profile
+	}
+	calib-labels: {
+		font: roboto-bold-28
+		fontColor: gray-edit-profile
+	}
+	instructions: {
+		font: roboto-medium-24
+		fontColor: gray-edit-profile
+	}
+	profile-name: {
+		font: roboto-black-30
+		fontColor: white
+	}
+	error: {
+		font: roboto-bold-27
+		fontColor: coral
+	}
+	history-header: {
+		font: roboto-bold-18
+		fontColor: gray-edit-profile
+	}
+	history-data: {
+		font: roboto-regular-18
+		fontColor: gray-edit-profile
+	}
+	constraints: {
+		font: roboto-regular-21
+		fontColor: white
+	}
+	pause-window: {
+		font: roboto-black-36
+		fontColor: gray-edit-profile
+	}
+	score: {
+		font: roboto-black-36
+		fontColor: score-points
+		background: game-points-window
+	}
+	selected-costume: {
+		font: roboto-black-36
+		fontColor: selected-costume-purple
+	}
+	achievement-locked: {
+		font: roboto-bold-24
+		fontColor: light-grey
+	}
+	achievement-unlocked: {
+		font: roboto-bold-24
+		fontColor: gray-edit-profile
+	}
+	window-title: {
+		font: roboto-black-24
+		fontColor: purple-label-windiw
+	}
+	achievement-modal-name: {
+		font: roboto-black-30
+		fontColor: coral
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+	default: {
+		font: roboto-bold-23
+		fontColorSelected: white
+		fontColorUnselected: select-box-list
+		selection: select-box-open-selected
+		background: select-box-open
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: {
+		background: select-box-open
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+	default: {
+		font: roboto-bold-23
+		fontColor: select-box
+		background: select-box-closed
+		scrollStyle: default
+		listStyle: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		knobDown: pelota_calibrar-pressed
+		background: slide-background
+		knob: pelota_calibrar
+	}
+	default-vertical: {
+		background: slide-background
+		knob: pelota_calibrar
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
+	default-horizontal: {
+		handle: split-pane
+	}
+	default-vertical: {
+		handle: split-pane
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: roboto-black-24
+		fontColor: black
+		downFontColor: white
+		up: boton-default
+		down: boton-default-pressed
+	}
+	no-image-btn: {
+		font: roboto-bold-27
+		fontColor: white
+		downFontColor: gray-edit-profile
+	}
+	save: {
+		font: roboto-black-18
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: guardarsintexto
+		down: guardarsintexto-pressed
+	}
+	profile-btn: {
+		font: roboto-bold-24
+		fontColor: white
+		downFontColor: white
+		up: botonazul
+		down: botonazul-pressed
+	}
+	btn-goto: {
+		font: roboto-black-27
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: btn-goto
+		down: btn-goto-pressed
+	}
+	btn-backto: {
+		font: roboto-black-27
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: btn-goback
+		down: btn-goback-pressed
+	}
+	btn-black: {
+		font: roboto-black-24
+		fontColor: white
+		up: btnBlack
+		down: btnBlack-pressed
+	}
+	back-history-button: {
+		font: roboto-bold-18
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: volver-01
+		down: volver-01-pressed
+	}
+	start-calibration: {
+		font: roboto-black-24
+		fontColor: white
+		downFontColor: white
+		up: comenzar_calibracion
+		down: comenzar_calibracion-pressed
+	}
+	avolar: {
+		font: roboto-black-43
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: avolar
+		down: avolar-pressed
+	}
+	a-jugar: {
+		font: roboto-black-30
+		fontColor: gray-edit-profile
+		downFontColor: white
+		up: avolar
+		down: avolar-pressed
+	}
+	btn-game-info: {
+		font: roboto-black-24
+		fontColor: black
+		up: boton-default
+	}
+	achievement-btn: {
+		font: roboto-bold-24
+		fontColor: white
+		up: botonmorado
+		down: botonmorado-pressed
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: {
+		font: roboto-medium-24
+		fontColor: gray-purple
+		background: campodetexto
+		cursor: cursor
+		messageFontColor: gray-purple
+	}
+	config-value: {
+		font: roboto-black-30
+		fontColor: gray-purple
+		background: config-field
+		cursor: cursor2
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		background: white-window
+		titleFont: roboto-black-24
+		titleFontColor: purple-label-windiw
+	}
+}
+}

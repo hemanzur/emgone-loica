@@ -1,0 +1,173 @@
+spreadsheet_forest_v2.png
+size: 2083, 823
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: false
+  xy: 0, 340
+  size: 969, 454
+  orig: 969, 454
+  offset: 0, 0
+  index: -1
+band
+  rotate: false
+  xy: 0, 794
+  size: 1132, 29
+  orig: 1132, 29
+  offset: 0, 0
+  index: -1
+bottom1
+  rotate: false
+  xy: 1717, 0
+  size: 145, 90
+  orig: 145, 90
+  offset: 0, 0
+  index: -1
+bottom2
+  rotate: false
+  xy: 1137, 0
+  size: 145, 110
+  orig: 145, 110
+  offset: 0, 0
+  index: -1
+bottom3
+  rotate: false
+  xy: 1572, 0
+  size: 145, 140
+  orig: 145, 140
+  offset: 0, 0
+  index: -1
+bottom4
+  rotate: false
+  xy: 992, 0
+  size: 145, 180
+  orig: 145, 180
+  offset: 0, 0
+  index: -1
+bottom5
+  rotate: false
+  xy: 1282, 0
+  size: 145, 210
+  orig: 145, 210
+  offset: 0, 0
+  index: -1
+bottom6:
+  rotate: false
+  xy: 1938, 584
+  size: 145, 239
+  orig: 145, 239
+  offset: 0, 0
+  index: -1
+bottom7
+  rotate: false
+  xy: 1938, 306
+  size: 145, 278
+  orig: 145, 278
+  offset: 0, 0
+  index: -1
+floating
+  rotate: false
+  xy: 292, 211
+  size: 969, 125
+  orig: 969, 125
+  offset: 0, 0
+  index: -1
+loicaCrash
+  rotate: false
+  xy: 0, 211
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaCrashTransp
+  rotate: false
+  xy: 146, 211
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaDown
+  rotate: false
+  xy: 847, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaMiddle
+  rotate: false
+  xy: 702, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaUp
+  rotate: false
+  xy: 122, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 970, 340
+  size: 967, 340
+  orig: 967, 340
+  offset: 0, 0
+  index: -1
+small-obstacle
+  rotate: false
+  xy: 0, 0
+  size: 52, 65
+  orig: 52, 65
+  offset: 0, 0
+  index: -1
+top1
+  rotate: false
+  xy: 52, 0
+  size: 70, 90
+  orig: 70, 90
+  offset: 0, 0
+  index: -1
+top2
+  rotate: false
+  xy: 412, 0
+  size: 145, 105
+  orig: 145, 105
+  offset: 0, 0
+  index: -1
+top3
+  rotate: false
+  xy: 557, 0
+  size: 145, 131
+  orig: 145, 131
+  offset: 0, 0
+  index: -1
+top4
+  rotate: false
+  xy: 267, 0
+  size: 145, 171
+  orig: 145, 171
+  offset: 0, 0
+  index: -1
+top5
+  rotate: false
+  xy: 1427, 0
+  size: 145, 211
+  orig: 145, 211
+  offset: 0, 0
+  index: -1
+top6
+  rotate: false
+  xy: 1853,0
+  size: 75, 241
+  orig: 75, 241
+  offset: 0, 0
+  index: -1
+top7
+  rotate: false
+  xy: 1928, 0
+  size: 75, 272
+  orig: 75, 272
+  offset: 0, 0
+  index: -1

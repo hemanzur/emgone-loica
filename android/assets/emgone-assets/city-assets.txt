@@ -1,0 +1,173 @@
+spreadsheet_city_v2.png
+size: 2300, 783
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: false
+  xy: 969, 329
+  size: 969, 454
+  orig: 969, 454
+  offset: 0, 0
+  index: -1
+band
+  rotate: false
+  xy: 0, 0
+  size: 1132, 29
+  orig: 1132, 29
+  offset: 0, 0
+  index: -1
+bottom1
+  rotate: false
+  xy: 1184, 0
+  size: 97, 87
+  orig: 97, 87
+  offset: 0, 0
+  index: -1
+bottom2
+  rotate: false
+  xy: 229, 107
+  size: 97, 118
+  orig: 97, 118
+  offset: 0, 0
+  index: -1
+bottom3
+  rotate: false
+  xy: 326, 107
+  size: 176, 142
+  orig: 176, 142
+  offset: 0, 0
+  index: -1
+bottom4
+  rotate: false
+  xy: 585, 107
+  size: 176, 178
+  orig: 176, 178
+  offset: 0, 0
+  index: -1
+bottom5
+  rotate: false
+  xy: 844, 107
+  size: 173, 210
+  orig: 173, 210
+  offset: 0, 0
+  index: -1
+bottom6
+  rotate: false
+  xy: 1952, 328
+  size: 172, 239
+  orig: 172, 239
+  offset: 0, 0
+  index: -1
+bottom7
+  rotate: false
+  xy: 2128, 327
+  size: 172, 270
+  orig: 172, 270
+  offset: 0, 0
+  index: -1
+floating
+  rotate: false
+  xy: 1091, 107
+  size: 913, 218
+  orig: 913, 218
+  offset: 0, 0
+  index: -1
+loicaCrash
+  rotate: false
+  xy: 0, 107
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaCrashTransp
+  rotate: false
+  xy: 1364, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaDown
+  rotate: false
+  xy: 1656, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaMiddle
+  rotate: false
+  xy: 1802, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaUp
+  rotate: false
+  xy: 1510, 0
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 0, 329
+  size: 965, 283
+  orig: 965, 283
+  offset: 0, 0
+  index: -1
+small-obstacle
+  rotate: false
+  xy: 1132, 0
+  size: 52, 65
+  orig: 52, 65
+  offset: 0, 0
+  index: -1
+top1
+  rotate: false
+  xy: 1281, 0
+  size: 83, 94
+  orig: 83, 94
+  offset: 0, 0
+  index: -1
+top2
+  rotate: false
+  xy: 146, 107
+  size: 83, 118
+  orig: 83, 118
+  offset: 0, 0
+  index: -1
+top3
+  rotate: false
+  xy: 502, 107
+  size: 83, 157
+  orig: 83, 157
+  offset: 0, 0
+  index: -1
+top4
+  rotate: false
+  xy: 761, 107
+  size: 83, 184
+  orig: 83, 184
+  offset: 0, 0
+  index: -1
+top5
+  rotate: false
+  xy: 1017, 107
+  size: 74, 216
+  orig: 74, 216
+  offset: 0, 0
+  index: -1
+top6
+  rotate: false
+  xy: 2023, 0
+  size: 74, 243
+  orig: 74, 243
+  offset: 0, 0
+  index: -1
+top7
+  rotate: false
+  xy: 2097, 0
+  size: 74, 272
+  orig: 74, 272
+  offset: 0, 0
+  index: -1

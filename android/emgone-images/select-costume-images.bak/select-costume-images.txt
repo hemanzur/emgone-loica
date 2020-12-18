@@ -1,0 +1,68 @@
+select-costume-images.png
+size: 1569, 1618
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg_choosecharacter
+  rotate: false
+  xy: 928, 481
+  size: 641, 1137
+  orig: 641, 1137
+  offset: 0, 0
+  index: -1
+loica1_bg
+  rotate: false
+  xy: 421, 0
+  size: 421, 232
+  orig: 421, 232
+  offset: 0, 0
+  index: -1
+loica2_bg
+  rotate: false
+  xy: 0, 0
+  size: 421, 232
+  orig: 421, 232
+  offset: 0, 0
+  index: -1
+loica3_bg
+  rotate: false
+  xy: 842, 0
+  size: 421, 236
+  orig: 421, 236
+  offset: 0, 0
+  index: -1
+loica4_bg
+  rotate: false
+  xy: 421, 236
+  size: 421, 243
+  orig: 421, 243
+  offset: 0, 0
+  index: -1
+loica5_bg
+  rotate: false
+  xy: 0, 236
+  size: 421, 242
+  orig: 421, 242
+  offset: 0, 0
+  index: -1
+scene_1_big
+  rotate: false
+  xy: 0, 481
+  size: 464, 246
+  orig: 464, 246
+  offset: 0, 0
+  index: -1
+scene_2_big
+  rotate: false
+  xy: 464, 481
+  size: 464, 246
+  orig: 464, 246
+  offset: 0, 0
+  index: -1
+scene_3_big
+  rotate: false
+  xy: 842, 236
+  size: 463, 245
+  orig: 463, 245
+  offset: 0, 0
+  index: -1

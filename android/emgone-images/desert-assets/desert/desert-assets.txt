@@ -1,0 +1,138 @@
+desert-assets.png
+size: 2010, 774
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: false
+  xy: 1041, 320
+  size: 969, 454
+  orig: 969, 454
+  offset: 0, 0
+  index: -1
+band
+  rotate: false
+  xy: 0, 0
+  size: 1132, 29
+  orig: 1132, 29
+  offset: 0, 0
+  index: -1
+bottom1
+  rotate: false
+  xy: 1132, 0
+  size: 151, 54
+  orig: 151, 54
+  offset: 0, 0
+  index: -1
+bottom2
+  rotate: false
+  xy: 1339, 0
+  size: 99, 86
+  orig: 99, 86
+  offset: 0, 0
+  index: -1
+bottom3
+  rotate: false
+  xy: 348, 92
+  size: 99, 118
+  orig: 99, 118
+  offset: 0, 0
+  index: -1
+bottom4
+  rotate: false
+  xy: 504, 92
+  size: 99, 160
+  orig: 99, 160
+  offset: 0, 0
+  index: -1
+bottom5
+  rotate: false
+  xy: 660, 92
+  size: 100, 189
+  orig: 100, 189
+  offset: 0, 0
+  index: -1
+floating
+  rotate: false
+  xy: 0, 320
+  size: 1041, 229
+  orig: 1041, 229
+  offset: 0, 0
+  index: -1
+loicaCrash
+  rotate: false
+  xy: 0, 92
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaCrashTransp
+  rotate: false
+  xy: 146, 92
+  size: 146, 107
+  orig: 146, 107
+  offset: 0, 0
+  index: -1
+loicaDown
+  rotate: false
+  xy: 1728, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaMiddle
+  rotate: false
+  xy: 1583, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+loicaUp
+  rotate: false
+  xy: 1438, 0
+  size: 145, 92
+  orig: 145, 92
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 760, 92
+  size: 971, 209
+  orig: 971, 209
+  offset: 0, 0
+  index: -1
+top1
+  rotate: false
+  xy: 1283, 0
+  size: 56, 80
+  orig: 56, 80
+  offset: 0, 0
+  index: -1
+top2
+  rotate: false
+  xy: 292, 92
+  size: 56, 110
+  orig: 56, 110
+  offset: 0, 0
+  index: -1
+top3
+  rotate: false
+  xy: 447, 92
+  size: 57, 140
+  orig: 57, 140
+  offset: 0, 0
+  index: -1
+top4
+  rotate: false
+  xy: 603, 92
+  size: 57, 170
+  orig: 57, 170
+  offset: 0, 0
+  index: -1
+top5
+  rotate: false
+  xy: 1731, 92
+  size: 57, 228
+  orig: 57, 228
+  offset: 0, 0
+  index: -1
