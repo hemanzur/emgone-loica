@@ -29,8 +29,8 @@ public class MicProcessor {
     private Butterworth bw8 = new Butterworth();
     private Butterworth bwLP = new Butterworth();
     private Butterworth bwHP = new Butterworth();
-    private int filtOrd = 10;
-    private float filtWidth = (float) 20.0;
+    private int filtOrd = 4;
+    private float filtWidth = (float) 10.0;
     private int SampleRate = 44100;
 
     public MicProcessor() {
@@ -78,7 +78,6 @@ public class MicProcessor {
         }
         float movAUX = sum/historicMean.size();
 
-        //System.out.println("RAW= " + asdasd);
         //10.000 - 21.000 para ejercicio apretar puño con disp1
         //15.000 - 24.000 para ejercicio levantar peso con brazo estirado con disp1
         //800 - 10.000 para audio hablado y soplar, maximo hablado 7k, soplando 10k
