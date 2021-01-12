@@ -340,6 +340,8 @@ public class RegisterScreen implements Screen {
     }
 
     private void postCredentials(String name, String rut, String phone, String email, String address, String password) {
+        // TODO: Connect post credentials to new app endpoint
+        return;
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
 
