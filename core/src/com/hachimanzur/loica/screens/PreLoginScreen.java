@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.main.MainGame;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
 
 public class PreLoginScreen implements Screen {
 
@@ -33,7 +33,7 @@ public class PreLoginScreen implements Screen {
     ImageButton btnFB;
     ImageButton btnGoogle;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
     public PreLoginScreen(MainGame game){
         this.game = game;
     }
@@ -76,7 +76,7 @@ public class PreLoginScreen implements Screen {
         emgoneImages.dispose();
     }
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(false);
         rebuildStage();
@@ -84,11 +84,11 @@ public class PreLoginScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS));
 
         Table layerBackground = buildBackgroundLayer();
         Table layerControlButtons = buildControlsLayer();
@@ -97,7 +97,7 @@ public class PreLoginScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControlButtons);
     }
@@ -105,7 +105,7 @@ public class PreLoginScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         Image imgBackground = new Image(emgoneImages, "initial-bg");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
         return layer;
     }
 

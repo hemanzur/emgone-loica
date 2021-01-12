@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -23,22 +23,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.Gamification.Achievements.UserAchievements;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.screens.modals.GameOverModal;
-import com.hachimanzur.loica.loicas.AbstractLoicaCostume;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.stages.AbstractEMGStage;
-import com.hachimanzur.loica.util.MicProcessor;
-import com.hachimanzur.loica.util.Obstacle;
-import com.hachimanzur.loica.util.UserData;
+import com.nursoft.emgone.loicas.AbstractLoicaCostume;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.screens.modals.AchievementModal;
+import com.nursoft.emgone.screens.modals.GameOverModal;
+import com.nursoft.emgone.stages.AbstractEMGStage;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Achievements.Achievement;
+import com.nursoft.emgone.util.Gamification.Achievements.UserAchievements;
+import com.nursoft.emgone.util.Gamification.Gamification;
+import com.nursoft.emgone.util.MicProcessor;
+import com.nursoft.emgone.util.Obstacle;
+import com.nursoft.emgone.util.UserData;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -46,18 +51,19 @@ import java.util.Random;
 
 public class EmgOneGame implements Screen {
 
-    private com.hachimanzur.loica.main.MainGame game;
+    private MainGame game;
 
     // HUD stuff
-    com.hachimanzur.loica.stages.AbstractEMGStage stage;
+    AbstractEMGStage stage;
     private Stage uiStage;
     private Skin emgoneSkin;
-    private TextureAtlas atlas = new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS);
+    private TextureAtlas atlas = new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS);
     private Table initialLayer;
     private Table playLayer;
     private Table pauseLayer;
 //    private Table gameOverLayer;
     private TextButton infoBtn;
+    private TextField userEmailField;
     private String dodgedObs = "ESQUIVADOS: ";
     private String time = "     TIEMPO: ";
     private Label pauseScore;
@@ -85,7 +91,7 @@ public class EmgOneGame implements Screen {
     OrthographicCamera camera;
 
     // Obstacles logic
-    LinkedList<com.hachimanzur.loica.util.Obstacle> obstacles = new LinkedList<com.hachimanzur.loica.util.Obstacle>();
+    LinkedList<Obstacle> obstacles = new LinkedList<Obstacle>();
     ArrayList<Integer> heightFactorsOfDodged = new ArrayList<Integer>();
     private boolean showTopObstacles;
     private boolean showBottomObstacles;
@@ -111,11 +117,11 @@ public class EmgOneGame implements Screen {
     private Rectangle loicaRectangle = new Rectangle();
     private Rectangle obstacleRectangle = new Rectangle();
     private float movingAverage = 0;
-    private com.hachimanzur.loica.util.MicProcessor recorder;
-    private final float totalTime = com.hachimanzur.loica.util.GamePreferences.instance.gameTime;
+    private MicProcessor recorder;
+    private final float totalTime = GamePreferences.instance.gameTime;
     private float gameTime;
     private boolean paused = false;
-    private com.hachimanzur.loica.util.GamePreferences prefs;
+    private GamePreferences prefs;
     private Random rnd;
 
 
@@ -153,12 +159,12 @@ public class EmgOneGame implements Screen {
         // camera stuff
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH);
+        camera.setToOrtho(false, Constants.GAME_VIEWPORT_HEIGHT, Constants.GAME_VIEWPORT_WIDTH);
         camera.rotate(-90);
         camera.translate(0, (camera.viewportWidth - camera.viewportHeight)/2);
 
         // obstacles stuff
-        obstacleMode = com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(com.hachimanzur.loica.util.GamePreferences.instance.obstacleMode);
+        obstacleMode = Constants.OBSTACLE_MODES.get(GamePreferences.instance.obstacleMode);
         // default mode: coordination
         showBottomObstacles = true;
         showTopObstacles = true;
@@ -173,35 +179,35 @@ public class EmgOneGame implements Screen {
 
         // game stuff
         this.isPractice = isPractice;
-        this.playerLevel = com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel();
+        this.playerLevel = Gamification.getCurrentLevel();
 
         recorder = new MicProcessor();
-        strengthThreshold = com.hachimanzur.loica.util.GamePreferences.instance.strengthThreshold;
+        strengthThreshold = GamePreferences.instance.strengthThreshold;
         Gdx.app.log("strengthThreshold", String.valueOf(strengthThreshold));
 
         if (isPractice) {
-            nearnessFactor = com.hachimanzur.loica.util.GamePreferences.instance.distanceBetweenObstaclesFactor;
-            heightMaximumFactor = com.hachimanzur.loica.util.GamePreferences.instance.obstacleMaxHeightFactor;
-            period = com.hachimanzur.loica.util.GamePreferences.instance.periodFactor;
-            horizontalVelocity = com.hachimanzur.loica.util.GamePreferences.instance.loicaXVelocity * 400;
+            nearnessFactor = GamePreferences.instance.distanceBetweenObstaclesFactor;
+            heightMaximumFactor = GamePreferences.instance.obstacleMaxHeightFactor;
+            period = GamePreferences.instance.periodFactor;
+            horizontalVelocity = GamePreferences.instance.loicaXVelocity * 400;
             Gdx.app.log("horizontalVelocity", String.valueOf(horizontalVelocity));
-            forceRest = com.hachimanzur.loica.util.Constants.getRestLevel(com.hachimanzur.loica.util.GamePreferences.instance.forceRest);
+            forceRest = Constants.getRestLevel(GamePreferences.instance.forceRest);
         }
 
         else {
-            nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getNearness(playerLevel);
-            heightMaximumFactor = com.hachimanzur.loica.util.Gamification.Gamification.getHeightFactor(playerLevel);
-            period = (float) com.hachimanzur.loica.util.Constants.calculatePeriod((com.hachimanzur.loica.util.Gamification.Gamification.velocityForLevel(playerLevel) * 400),  nearnessFactor);
-            horizontalVelocity = com.hachimanzur.loica.util.Gamification.Gamification.velocityForLevel(playerLevel) * 400;
-            forceRest = com.hachimanzur.loica.util.Gamification.Gamification.getRestForLevel(playerLevel);
+            nearnessFactor = Gamification.getNearness(playerLevel);
+            heightMaximumFactor = Gamification.getHeightFactor(playerLevel);
+            period = (float)Constants.calculatePeriod((Gamification.velocityForLevel(playerLevel) * 400),  nearnessFactor);
+            horizontalVelocity = Gamification.velocityForLevel(playerLevel) * 400;
+            forceRest = Gamification.getRestForLevel(playerLevel);
         }
         if (obstacleMode.equals("force")) {
             TextureRegion randomObstacle = stage.getRandomGroundObs(heightMaximumFactor - 1);
             if (!isPractice)
-                nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getForceDistance(playerLevel);
-            period = com.hachimanzur.loica.util.Constants.calculateForcePeriod(nearnessFactor);
-            forceRest = com.hachimanzur.loica.util.Constants.getRestMultiplier(com.hachimanzur.loica.util.GamePreferences.instance.forceRest);
-            correctionFactor = com.hachimanzur.loica.util.Constants.calculateForceCorrection(period, nearnessFactor, randomObstacle.getRegionWidth());
+                nearnessFactor = Gamification.getForceDistance(playerLevel);
+            period = Constants.calculateForcePeriod(nearnessFactor);
+            forceRest = Constants.getRestMultiplier(GamePreferences.instance.forceRest);
+            correctionFactor = Constants.calculateForceCorrection(period, nearnessFactor, randomObstacle.getRegionWidth());
             horizontalVelocity = 300.0f;
             Gdx.app.log("obstacleWidth", String.valueOf(randomObstacle.getRegionWidth()));
         }
@@ -236,17 +242,17 @@ public class EmgOneGame implements Screen {
     @Override
     public void show() {
         Gdx.input.setCatchBackKey(true);
-        uiStage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        uiStage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         ((OrthographicCamera)uiStage.getCamera()).rotate(-90);
         Gdx.input.setInputProcessor(uiStage);
         buildUIStage();
-        com.hachimanzur.loica.util.Gamification.Achievements.UserAchievements.instance.getAchievementsFromServer();
+        UserAchievements.instance.getAchievementsFromServer();
     }
 
     private void buildUIStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
         initialLayer = buildInitialLayer();
@@ -255,8 +261,8 @@ public class EmgOneGame implements Screen {
 
         uiStage.clear();
         uiStage.addActor(uiStack);
-        uiStack.setPosition(-com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT/5, com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH/3);
-        uiStack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT, com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH);
+        uiStack.setPosition(-Constants.VIEWPORT_HEIGHT/5, Constants.VIEWPORT_WIDTH/3);
+        uiStack.setSize(Constants.VIEWPORT_HEIGHT, Constants.VIEWPORT_WIDTH);
         uiStack.add(initialLayer);
         uiStack.add(playLayer);
         playLayer.setVisible(false);
@@ -294,8 +300,8 @@ public class EmgOneGame implements Screen {
         infoBtn = new TextButton("", emgoneSkin, "btn-game-info");
 
         layer.add(pauseBtn).expand().top().left();
-        layer.add(infoBtn).width(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT/3).fillX().top();
-        layer.add().width(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT/3 - 30);
+        layer.add(infoBtn).width(Constants.VIEWPORT_HEIGHT/3).fillX().top();
+        layer.add().width(Constants.VIEWPORT_HEIGHT/3 - 30);
 
         return layer;
     }
@@ -326,7 +332,7 @@ public class EmgOneGame implements Screen {
         btnBackToMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new com.hachimanzur.loica.screens.SummaryScreen(game, isPractice));
+                game.setScreen(new SummaryScreen(game, isPractice));
             }
         });
 
@@ -343,11 +349,12 @@ public class EmgOneGame implements Screen {
 
     private GameOverModal buildGameOverModal() {
         GameOverModal gameOverModal = new GameOverModal();
-        gameOverModal.build(obstaclesDodged, numberOfObstaclesCollided, emgoneSkin, stage.endGameObs, atlas,
+        userEmailField = new TextField("", emgoneSkin);
+        gameOverModal.build(obstaclesDodged, numberOfObstaclesCollided, userEmailField, emgoneSkin, stage.endGameObs, atlas,
                 new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        postData();
+                        postExercise();
                         game.setScreen(new SummaryScreen(game, isPractice));
                     }
                 }
@@ -396,7 +403,6 @@ public class EmgOneGame implements Screen {
             numberOfObstaclesCollided = (int)Math.round(numberOfObstaclesCollided * correctionFactor);
             Gdx.app.log("correction", String.valueOf(correctionFactor));
             Gdx.app.log("period", String.valueOf(period));
-
         }
 
         // Add game over modal
@@ -410,12 +416,12 @@ public class EmgOneGame implements Screen {
 
         // Update obstaclesDodged
         boolean perfectScore = (numberOfObstaclesCollided == 0);
-        thisGameScore = com.hachimanzur.loica.util.Gamification.Gamification.getThisGameScore(heightFactorsOfDodged, perfectScore);
+        thisGameScore = Gamification.getThisGameScore(heightFactorsOfDodged, perfectScore);
         if (!isPractice) {
-            int oldLevel = com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel();
-            totalScore = com.hachimanzur.loica.util.Gamification.Gamification.updateScore(thisGameScore);
-            int newLevel = com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel();
-            com.hachimanzur.loica.util.Gamification.Achievements.UserAchievements.instance.checkForAchievements(uiStack, oldLevel, newLevel, emgoneSkin);
+            int oldLevel = Gamification.getCurrentLevel();
+            totalScore = Gamification.updateScore(thisGameScore);
+            int newLevel = Gamification.getCurrentLevel();
+            UserAchievements.instance.checkForAchievements(uiStack, oldLevel, newLevel, emgoneSkin);
             UserAchievements.instance.sendAchievementsToServer();
         }
     }
@@ -423,7 +429,7 @@ public class EmgOneGame implements Screen {
     private void resetWorld() {
         starOffset2 = stage.backgroundMoving.getRegionWidth();
         gameTime = totalTime;
-        loicaPosition.set(com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH*0.06f, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT/2);
+        loicaPosition.set(Constants.GAME_VIEWPORT_WIDTH*0.06f, Constants.GAME_VIEWPORT_HEIGHT/2);
         starPosition.set(0, 0);
         loicaVelocity.set(0, 0);
         starVelocity.set(0, 0);
@@ -431,15 +437,15 @@ public class EmgOneGame implements Screen {
         boolean isUp = getObsPosition();
         int heightFactor = rnd.nextInt(heightMaximumFactor);
         if (obstacleMode.equals("force")) {
-            forceFirstObs = camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2;
+            forceFirstObs = camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2;
             forceLastObs = -1;
             heightFactor = heightMaximumFactor - 1;
         }
         TextureRegion random_obs = isUp ? stage.getRandomCeilingObs(heightFactor) : stage.getRandomGroundObs(heightFactor);
         obstacles.offer(
-                new com.hachimanzur.loica.util.Obstacle(
-                        camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2,
-                        com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT-random_obs.getRegionHeight(),
+                new Obstacle(
+                        camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2,
+                        Constants.GAME_VIEWPORT_HEIGHT-random_obs.getRegionHeight(),
                         random_obs,
                         heightFactor + 1,
                         isUp)
@@ -457,7 +463,7 @@ public class EmgOneGame implements Screen {
         loicaStateTime += deltaTime;
 
         if (gameState == GameState.Running) {
-            loicaPosition.y = MathUtils.clamp(movingAverage*strengthThreshold, 0, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - com.hachimanzur.loica.util.Constants.GROUND_HEIGHT);
+            loicaPosition.y = MathUtils.clamp(movingAverage*strengthThreshold, 0,Constants.GAME_VIEWPORT_HEIGHT - Constants.GROUND_HEIGHT);
             loicaVelocity.set(horizontalVelocity, 0);
             starVelocity.set(horizontalVelocity * 0.2f, 0);
         }
@@ -493,7 +499,7 @@ public class EmgOneGame implements Screen {
     }
 
     private void calculateMovingAverage() {
-        movingAverage = map(recorder.getMovingAverage(), com.hachimanzur.loica.util.GamePreferences.instance.minCalibrationHeight, com.hachimanzur.loica.util.GamePreferences.instance.maxCalibrationHeight, 1, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT);
+        movingAverage = map(recorder.getMovingAverage(), GamePreferences.instance.minCalibrationHeight, GamePreferences.instance.maxCalibrationHeight, 1, Constants.GAME_VIEWPORT_HEIGHT);
     }
 
     private void updateGameState(float deltaTime) {
@@ -517,17 +523,17 @@ public class EmgOneGame implements Screen {
             distanceClear = (distanceForce * forceRest);
         }
         // averiguar si hay algún descanso máximo, just in case
-        if (forceFirstObs != -1 && camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2 - forceFirstObs >= distanceForce) {
+        if (forceFirstObs != -1 && camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2 - forceFirstObs >= distanceForce) {
             forceFirstObs = -1;
-            forceLastObs = camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2;
-        } else if (forceLastObs != -1 && camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2 - forceLastObs >= distanceClear) {
-            forceFirstObs = camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2;
+            forceLastObs = camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2;
+        } else if (forceLastObs != -1 && camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2 - forceLastObs >= distanceClear) {
+            forceFirstObs = camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2;
             forceLastObs = -1;
         }
     }
 
     private void addObstacleToGameIfRequired() {
-        com.hachimanzur.loica.util.Obstacle lastObstacle = obstacles.peekLast();
+        Obstacle lastObstacle = obstacles.peekLast();
         int randomHeightFactor = rnd.nextInt(heightMaximumFactor);
         float distanceBetweenObstacles = nearnessFactor;
         /*if (isPractice) {
@@ -546,10 +552,10 @@ public class EmgOneGame implements Screen {
             if (forceLastObs > 0) return;
             TextureRegion randomObstacle = stage.getRandomGroundObs(heightMaximumFactor - 1);
 
-            if(lastObstacle.position.x < camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2 - randomObstacle.getRegionWidth()) {
-                obstacles.offer(new com.hachimanzur.loica.util.Obstacle(
-                        camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2,
-                        com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - randomObstacle.getRegionHeight(),
+            if(lastObstacle.position.x < camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2 - randomObstacle.getRegionWidth()) {
+                obstacles.offer(new Obstacle(
+                        camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2,
+                        Constants.GAME_VIEWPORT_HEIGHT - randomObstacle.getRegionHeight(),
                         randomObstacle,
                         heightMaximumFactor,
                         false));
@@ -557,12 +563,12 @@ public class EmgOneGame implements Screen {
         } else {
             // si es alguno de los modos de coordinación, sumar un random gaussiano al distancebetweenobstacles
             if (!obstacleMode.equals("speed")) {
-                double addRandom = rnd.nextGaussian() * com.hachimanzur.loica.util.Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV;
-                if (addRandom < com.hachimanzur.loica.util.Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV && addRandom > -com.hachimanzur.loica.util.Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV) {
+                double addRandom = rnd.nextGaussian() * Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV;
+                if (addRandom < Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV && addRandom > -Constants.DISTANCE_BETWEEN_OBSTACLES_STDEV) {
                     distanceBetweenObstacles += addRandom;
                 }
             }
-            if(lastObstacle.position.x < camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2 - distanceBetweenObstacles) {
+            if(lastObstacle.position.x < camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2 - distanceBetweenObstacles) {
                 Gdx.app.log("distance", Float.toString(distanceBetweenObstacles));
                 boolean isUp;
                 if (alternateObstacles) {
@@ -573,9 +579,9 @@ public class EmgOneGame implements Screen {
                 }
                 TextureRegion randomCeilingObstacle = stage.getRandomCeilingObs(randomHeightFactor);
 
-                obstacles.offer(new com.hachimanzur.loica.util.Obstacle(
-                        camera.position.x + com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_WIDTH/2,
-                        com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - randomCeilingObstacle.getRegionHeight(),
+                obstacles.offer(new Obstacle(
+                        camera.position.x + Constants.GAME_VIEWPORT_WIDTH/2,
+                        Constants.GAME_VIEWPORT_HEIGHT - randomCeilingObstacle.getRegionHeight(),
                         isUp ? randomCeilingObstacle : stage.getRandomGroundObs(randomHeightFactor),
                         randomHeightFactor + 1,
                         isUp));
@@ -584,14 +590,14 @@ public class EmgOneGame implements Screen {
     }
 
     private void removeObstacleFromGameIfRequired() {
-        com.hachimanzur.loica.util.Obstacle firstObstacle = obstacles.peek();
+        Obstacle firstObstacle = obstacles.peek();
         if (obstacles.size() > 1 && camera.position.x - firstObstacle.position.x > 400 + firstObstacle.image.getRegionWidth()) {
             obstacles.poll();
         }
     }
 
     private void checkCollisions() {
-        for(com.hachimanzur.loica.util.Obstacle obs : obstacles) {
+        for(Obstacle obs : obstacles) {
             obstacleRectangle.set(obs.position.x + (obs.image.getRegionWidth() - 30) / 2 + 20, obs.position.y, 20, obs.getRealHeight() - 10);
             if(loicaRectangle.overlaps(obstacleRectangle)) {
                 if(!obs.overlaping){
@@ -626,9 +632,9 @@ public class EmgOneGame implements Screen {
 
         batch.draw(stage.background, camera.position.x - stage.background.getRegionWidth() / 2, 0);
 
-        batch.draw(stage.backgroundMoving, starPosition.x+starOffset1, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - stage.backgroundMoving.getRegionHeight());
+        batch.draw(stage.backgroundMoving, starPosition.x+starOffset1, Constants.GAME_VIEWPORT_HEIGHT - stage.backgroundMoving.getRegionHeight());
 
-        batch.draw(stage.backgroundMoving2, starPosition.x+starOffset2, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - stage.backgroundMoving2.getRegionHeight());
+        batch.draw(stage.backgroundMoving2, starPosition.x+starOffset2, Constants.GAME_VIEWPORT_HEIGHT - stage.backgroundMoving2.getRegionHeight());
 
         batch.draw(stage.backgroundLandscape, mountainsOffsetX, 0);
         batch.draw(stage.backgroundLandscape, mountainsOffsetX-1 + stage.backgroundLandscape.getRegionWidth(), 0);
@@ -636,8 +642,8 @@ public class EmgOneGame implements Screen {
         batch.draw(stage.ground, groundOffsetX, 0);
         //el -2 s para que no haya un pequeño espacio entre las repeticiones del fondo, es traslape
         batch.draw(stage.ground, groundOffsetX-2 + stage.ground.getRegionWidth(), 0);
-        batch.draw(ceiling, groundOffsetX, com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - ceiling.getRegionHeight());
-        batch.draw(ceiling, groundOffsetX-2 + ceiling.getRegionWidth(), com.hachimanzur.loica.util.Constants.GAME_VIEWPORT_HEIGHT - ceiling.getRegionHeight());
+        batch.draw(ceiling, groundOffsetX, Constants.GAME_VIEWPORT_HEIGHT - ceiling.getRegionHeight());
+        batch.draw(ceiling, groundOffsetX-2 + ceiling.getRegionWidth(), Constants.GAME_VIEWPORT_HEIGHT - ceiling.getRegionHeight());
 
         // Draw the obstacles
         for(Obstacle obs: obstacles) {
@@ -683,89 +689,6 @@ public class EmgOneGame implements Screen {
 
     }
 
-    private void saveScore(int score) {
-        prefs = com.hachimanzur.loica.util.GamePreferences.instance;
-        prefs.score += score;
-        prefs.save();
-    }
-
-    private void postData() {
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-
-        HttpRequest request = new HttpRequest(HttpMethods.POST);
-        request.setUrl(com.hachimanzur.loica.util.Constants.POST_GAME_DATA_URL);
-        request.setHeader("Content-Type", "application/json");
-        request.setHeader("Authorization", "Token token=" + UserData.getToken());
-        request.setTimeOut(com.hachimanzur.loica.util.Constants.TIMEOUT);
-
-        float restMultiplier = 0;
-        if (isPractice) {
-            restMultiplier = com.hachimanzur.loica.util.Constants.getRestMultiplier(com.hachimanzur.loica.util.GamePreferences.instance.forceRest);
-        } else {
-            restMultiplier = com.hachimanzur.loica.util.Gamification.Gamification.getRestForLevel(Gamification.getCurrentLevel());
-        }
-
-        String content = "{" +
-            "\"exercise\": {" +
-                "\"dodged\": " + obstaclesDodged + ", " +
-                "\"collisions\": " + numberOfObstaclesCollided + ", " +
-                "\"obstacles\": \"" + obstacles_position + "\", " +
-                "\"game_time\": " + com.hachimanzur.loica.util.GamePreferences.instance.gameTime + " , " +
-                "\"speed\": " + com.hachimanzur.loica.util.GamePreferences.instance.loicaXVelocity + " , " +
-                "\"obstacle_distance\": " + com.hachimanzur.loica.util.GamePreferences.instance.distanceBetweenObstaclesFactor + ", " +
-                "\"obstacles_size\": " + com.hachimanzur.loica.util.GamePreferences.instance.obstacleMaxHeightFactor + ", " +
-                "\"min_calibration_amp\": " + com.hachimanzur.loica.util.GamePreferences.instance.minCalibrationHeight + ", " +
-                "\"max_calibration_amp\": " + com.hachimanzur.loica.util.GamePreferences.instance.maxCalibrationHeight + ", " +
-                "\"kind\": \"" + gameType(isPractice) + "\", " +
-                "\"body_part\": \"" + com.hachimanzur.loica.util.GamePreferences.instance.bodyPart + "\", " +
-                "\"points\": " + thisGameScore + ", " +
-                "\"score\": " + totalScore + " ," +
-                "\"exercise_type\": " + String.valueOf(getObstacleModeEnum()) +"," +
-                "\"gravity\": " + 1/ com.hachimanzur.loica.util.GamePreferences.instance.strengthThreshold +"," +
-                "\"obstacle_size\": " + com.hachimanzur.loica.util.GamePreferences.instance.obstacleMaxHeightFactor +"," +
-                "\"obstacle_periodicity\":" + ((getObstacleModeEnum() != 2) ? com.hachimanzur.loica.util.GamePreferences.instance.periodFactor : "0") +"," +
-                "\"obstacle_duration\": " + ((getObstacleModeEnum() == 2) ? com.hachimanzur.loica.util.GamePreferences.instance.forceDuration : "0") +"," +
-                "\"obstacle_rest\": " + ((getObstacleModeEnum() == 2) ? restMultiplier : "0") +
-            "}" +
-        "}";
-
-        System.out.println(content);
-        request.setContent(content);
-
-        Net.HttpResponseListener listener = new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                int statusCode = httpResponse.getStatus().getStatusCode();
-                System.out.println("Status code " + statusCode);
-                System.out.println("Result: " + httpResponse.getResultAsString());
-//                if (statusCode != 201) {
-//                    refuse(statusCode);
-//                }
-//                else {
-//                    isAuthenticated = true;
-//                }
-            }
-            @Override
-            public void failed(Throwable t) {
-//                String failedToConnect = t.getLocalizedMessage();
-//                if (failedToConnect.contains("failed to connect") ||
-//                        failedToConnect.contains("timed out") ||
-//                        failedToConnect.contains("refused") ||
-//                        failedToConnect.contains("unreachable"))
-//                if (t.getLocalizedMessage().contains("failed to connect"))
-//                    refuse(503);
-                System.out.println("Failed " + t.getMessage());
-            }
-
-            @Override
-            public void cancelled() {
-                System.out.println("Cancelled");
-            }
-        };
-
-        Gdx.net.sendHttpRequest(request, listener);
-    }
 
     private float map(float x, float a, float b, float c, float d) {
         float res = ((d - c)*(x-a)/(b-a)) + c;
@@ -785,8 +708,228 @@ public class EmgOneGame implements Screen {
         return 0;
     }
 
+    private String getObstacleMode() {
+        String obstacleMode = Constants.OBSTACLE_MODES.get(GamePreferences.instance.obstacleMode);
+        Gdx.app.log("obstacle_mode", obstacleMode);
+        if      (obstacleMode.equals("speed"))      { return "Velocidad"; }
+        else if (obstacleMode.equals("force"))      { return "Fuerza/Resistencia"; }
+        else if (obstacleMode.equals("coord"))      { return "Coordinación"; }
+        else if (obstacleMode.equals("coordUp"))    { return "Coordinación (arriba)"; }
+        else if (obstacleMode.equals("coordDn"))    { return "Coordinación (abajo)"; }
+        return "Otro";
+    }
+
     private String gameType(boolean isPractice) {
-        if (isPractice) return "practice";
-        return "game";
+        if (isPractice) return "Práctica";
+        return "Juego";
+    }
+
+    class ExerciseGraphql {
+        private String id;
+        private String tipo;
+        private String modo;
+        private String lugar_cuerpo;
+        private double velocidad;
+        private int tiempo;
+        private String gravedad;
+        private double tamano;
+        private String periodicidad;
+        private int esquivados;
+        private int colisionados;
+        private int puntaje;
+        private int puntos;
+        private double min_calibration_amp;
+        private double max_calibration_amp;
+        private int duracion_obstaculo;
+        private double distancia_obstaculo;
+        private String obstaculos;
+        private float obstacle_rest;
+        private String comentario;
+
+        ExerciseGraphql(String id,
+                        String kind,
+                        String exercise_type,
+                        String body_part,
+                        double speed,
+                        int game_time,
+                        double gravity,
+                        double obstacles_size,
+                        String obstacle_periodicity,
+                        int dodged,
+                        int collisions,
+                        int score,
+                        int points,
+                        double min_calibration_amp,
+                        double max_calibration_amp,
+                        int obstacle_duration,
+                        double obstacle_distance,
+                        String obstacles,
+                        float obstacle_rest,
+                        String comentario) {
+            this.id = id;
+            this.tipo = kind;
+            this.modo = exercise_type;
+            this.lugar_cuerpo = body_part;
+            this.velocidad = speed;
+            this.tiempo = game_time;
+            this.gravedad = Double.toString(gravity) + 'x';
+            this.tamano = obstacles_size;
+            this.periodicidad = obstacle_periodicity;
+            this.esquivados = dodged;
+            this.colisionados = collisions;
+            this.puntaje = score;
+            this.puntos = points;
+            this.min_calibration_amp = min_calibration_amp;
+            this.max_calibration_amp = max_calibration_amp;
+            this.duracion_obstaculo = obstacle_duration;
+            this.distancia_obstaculo = obstacle_distance;
+            this.obstaculos = obstacles;
+            this.obstacle_rest = obstacle_rest;
+            this.comentario = comentario;
+        }
+    }
+
+    class CreateExerciseGraphqlRequest {
+        private ExerciseGraphql variables;
+        private String query;
+        private String operationName;
+
+        CreateExerciseGraphqlRequest(ExerciseGraphql exercise) {
+            operationName = "crearEjercicio";
+            query = "  mutation crearEjercicio (\n" +
+                    "    $id: ID!\n" +
+                    "    $tipo: String\n" +
+                    "    $modo: String\n" +
+                    "    $lugar_cuerpo: String\n" +
+                    "    $velocidad: Float\n" +
+                    "    $tiempo: Int\n" +
+                    "    $gravedad: String\n" +
+                    "    $tamano: Float\n" +
+                    "    $periodicidad: String\n" +
+                    "    $duracion_descanso: String\n" +
+                    "    $esquivados: Int\n" +
+                    "    $colisionados: Int\n" +
+                    "    $puntaje: Int\n" +
+                    "    $puntos: Int\n" +
+                    "    $min_calibration_amp: Float\n" +
+                    "    $max_calibration_amp: Float\n" +
+                    "    $duracion_obstaculo: Int\n" +
+                    "    $distancia_obstaculo: Float\n" +
+                    "    $obstaculos: String\n" +
+                    "    $obstacle_rest: Int\n" +
+                    "    $comentario: String\n" +
+                    "  ) {\n" +
+                    "    createEjercicio (\n" +
+                    "      input: {\n" +
+                    "        data: {\n" +
+                    "          user: $id\n" +
+                    "          tipo: $tipo\n" +
+                    "          modo: $modo\n" +
+                    "          lugar_cuerpo: $lugar_cuerpo\n" +
+                    "          velocidad: $velocidad\n" +
+                    "          tiempo: $tiempo\n" +
+                    "          gravedad: $gravedad\n" +
+                    "          tamano: $tamano\n" +
+                    "          periodicidad: $periodicidad\n" +
+                    "          duracion_descanso: $duracion_descanso\n" +
+                    "          esquivados: $esquivados\n" +
+                    "          colisionados: $colisionados\n" +
+                    "          puntaje: $puntaje\n" +
+                    "          puntos: $puntos\n" +
+                    "          min_calibration_amp: $min_calibration_amp\n" +
+                    "          max_calibration_amp: $max_calibration_amp\n" +
+                    "          duracion_obstaculo: $duracion_obstaculo\n" +
+                    "          distancia_obstaculo: $distancia_obstaculo\n" +
+                    "          obstaculos: $obstaculos\n" +
+                    "          obstacle_rest: $obstacle_rest\n" +
+                    "          comentario: $comentario\n" +
+                    "        }\n" +
+                    "      }\n" +
+                    "    ) {\n" +
+                    "      ejercicio {\n" +
+                    "        id\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }";
+            variables = exercise;
+        }
+    }
+
+    private ExerciseGraphql prepareExercise(String id) {
+
+        float restMultiplier = 0;
+        if (isPractice) {
+            restMultiplier = Constants.getRestMultiplier(GamePreferences.instance.forceRest);
+        } else {
+            restMultiplier = Gamification.getRestForLevel(Gamification.getCurrentLevel());
+        }
+
+        ExerciseGraphql exercise = new ExerciseGraphql(id,
+                gameType(isPractice),
+                getObstacleMode(),
+                GamePreferences.instance.bodyPart,
+                GamePreferences.instance.loicaXVelocity,
+                GamePreferences.instance.gameTime,
+                GamePreferences.instance.strengthThreshold,
+                GamePreferences.instance.obstacleMaxHeightFactor,
+                ((getObstacleModeEnum() != 2) ? Integer.toString(GamePreferences.instance.periodFactor) + " [s]" : "(n.d.)"),
+                obstaclesDodged,
+                numberOfObstaclesCollided,
+                totalScore,
+                thisGameScore,
+                GamePreferences.instance.minCalibrationHeight,
+                GamePreferences.instance.maxCalibrationHeight,
+                ((getObstacleModeEnum() == 2) ? GamePreferences.instance.forceDuration :0),
+                GamePreferences.instance.distanceBetweenObstaclesFactor,
+                obstacles_position,
+                ((getObstacleModeEnum() == 2) ? restMultiplier : 0),
+                userEmailField.getText());
+        return exercise;
+    }
+
+    private void postExercise() {
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        String jwt = UserData.getToken();
+        String id = UserData.getId();
+        String bearer = "Bearer " + jwt;
+        System.out.println(bearer);
+        System.out.println(id);
+        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+        request.setUrl(Constants.GRAPHQL_URL);
+
+        ExerciseGraphql exerciseGraphql = prepareExercise(id);
+        CreateExerciseGraphqlRequest contentRequest = new CreateExerciseGraphqlRequest(exerciseGraphql);
+        System.out.println(json.prettyPrint(contentRequest));
+        request.setContent(json.prettyPrint(contentRequest));
+        request.setHeader("Content-Type", "application/json");
+        request.setHeader("Authorization", bearer);
+        request.setTimeOut(Constants.TIMEOUT);
+
+        Net.HttpResponseListener listener = new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                int statusCode = httpResponse.getStatus().getStatusCode();
+                System.out.println("Status code " + httpResponse.getStatus().getStatusCode());
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                JsonValue data = jsonResponse.get("data");
+                System.out.println("Result: " + responseString);
+                if ( statusCode != 200 ) {
+                    System.out.println("Failed " );
+                }
+            }
+            @Override
+            public void failed(Throwable t) {
+                System.out.println("Failed " + t.getMessage());
+            }
+
+            @Override
+            public void cancelled() {
+                System.out.println("Cancelled");
+            }
+        };
+
+        Gdx.net.sendHttpRequest(request, listener);
     }
 }

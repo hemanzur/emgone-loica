@@ -1,8 +1,9 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,13 +23,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.util.UserData;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
+import com.nursoft.emgone.util.UserData;
 
 import java.util.regex.Pattern;
 
@@ -60,10 +63,8 @@ public class EditProfileScreen implements Screen {
     private UserData userData;
     private UserData newUserData;
     private TextField nameField;
-    private TextField rutField;
     private TextField phoneField;
     private TextField addressField;
-    private TextField emailField;
     private TextField passField;
     private TextField confirmPassField;
     private Label lblError;
@@ -99,7 +100,7 @@ public class EditProfileScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || isAuthenticated) {
-                game.setScreen(new com.hachimanzur.loica.screens.ProfileScreen(game));
+                game.setScreen(new ProfileScreen(game));
         }
     }
 
@@ -240,24 +241,11 @@ public class EditProfileScreen implements Screen {
         window.pad(50, 80, 50, 80);
         //window.debug();
 
-        // Input rut
-        rutField = new TextField(userData.rut, emgoneSkin);
-        rutField.setMessageText("R.U.T");
-        window.add(rutField).width(textFieldWidth).padBottom(25).row();
-        rutField.setAlignment(Align.center);
-
         // Input phone
         phoneField = new TextField(userData.phone, emgoneSkin);
         phoneField.setMessageText("Teléfono");
         window.add(phoneField).width(textFieldWidth).padBottom(25).row();
         phoneField.setAlignment(Align.center);
-
-        // Input email
-        emailField = new TextField(userData.email, emgoneSkin);
-        emailField.setMessageText("Email");
-        window.add(emailField).width(textFieldWidth).padBottom(25).row();
-        emailField.setAlignment(Align.center);
-        emailField.addListener(focusListener);
 
         // Input address
         addressField = new TextField(userData.address, emgoneSkin);
@@ -289,12 +277,10 @@ public class EditProfileScreen implements Screen {
         btnSave.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String email = emailField.getText();
-                String rut = rutField.getText();
                 String newPassword = passField.getText();
                 String confirmPassword = confirmPassField.getText();
-                if (areCredentialsValid(email, rut, newPassword, confirmPassword)) {
-                    postCredentials(nameField.getText(), rutField.getText(), phoneField.getText(), email, addressField.getText(), newPassword);
+                if (areCredentialsValid(newPassword, confirmPassword)) {
+                    postCredentials(nameField.getText(), phoneField.getText(), addressField.getText(), newPassword);
                 }
             }
         });
@@ -303,23 +289,8 @@ public class EditProfileScreen implements Screen {
         return window;
     }
 
-    private boolean areCredentialsValid(String email, String rut, String newPassword, String confirmNewPass) {
-        if ("".equals(email)) {
-            refuse(Constants.EMPTY_FIELDS);
-            return false;
-        }
-
-        else if (!validRut(rut)) {
-            refuse(Constants.INVALID_RUT);
-            return false;
-        }
-
-        else if (!pattern.matcher(email).matches()) {
-            refuse(Constants.INVALID_EMAIL_FORMAT);
-            return false;
-        }
-
-        else if (newPassword.length() > 0) {
+    private boolean areCredentialsValid(String newPassword, String confirmNewPass) {
+        if (newPassword.length() > 0) {
             if (newPassword.length() < 8) {
                 refuse(Constants.PASSWORD_TOO_SHORT);
                 return false;
@@ -332,33 +303,94 @@ public class EditProfileScreen implements Screen {
 
             else return true;
         }
-
         //verificar otras cosas
 
         else return true;
     }
 
-    class Data {
-        UserData user;
+    class UserGraphql {
+        private String id;
+        private String nombre;
+        private String telefono;
+        private String direccion;
+        private String password;
 
-        Data(UserData u) {
-            user = u;
+        UserGraphql(String id,
+                    String nombre,
+                    String telefono,
+                    String direccion,
+                    String password) {
+            this.id = id;
+            this.nombre = nombre;
+            this.telefono = telefono;
+            this.direccion = direccion;
+            this.password = password;
         }
     }
 
-    private void postCredentials(String name, String rut, String phone, String email, String address, String password) {
+    class EditUserGraphqlRequest {
+        private UserGraphql variables;
+        private String query;
+        private String operationName;
+
+        EditUserGraphqlRequest(UserGraphql user) {
+            String passwordInput = "    $password: String\n";
+            String passwordData = "          password: $password\n";
+            if (user.password.trim() == "") {
+                passwordInput = "";
+                passwordData = "";
+            }
+            operationName = "editarUsuario";
+            query = "  mutation editarUsuario (\n" +
+                    "    $id: ID!\n" +
+                    "    $nombre: String\n" +
+                    "    $telefono: String\n" +
+                    "    $direccion: String\n" +
+                    passwordInput +
+                    "  ) {\n" +
+                    "    updateUser (\n" +
+                    "      input: {\n" +
+                    "        where: {\n" +
+                    "          id: $id \n" +
+                    "        }\n" +
+                    "        data: {\n" +
+                    "          nombre: $nombre\n" +
+                    "          telefono: $telefono\n" +
+                    "          direccion: $direccion\n" +
+                    passwordData +
+                    "        }\n" +
+                    "      }\n" +
+                    "    ) {\n" +
+                    "      user {\n" +
+                    "        id\n" +
+                    "        nombre\n" +
+                    "        telefono\n" +
+                    "        direccion\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }";
+            variables = user;
+        }
+    }
+
+    private void postCredentials(String name, String phone, String address, String password) {
 
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
-
-        newUserData = new UserData(name, rut, phone, email, address, password, UserData.getToken());
-        Data data = new Data(newUserData);
-
-        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.PUT);
-        request.setUrl(Constants.EDIT_PROFILE_URL);
-        request.setContent(json.prettyPrint(data));
+        String jwt = userData.getToken();
+        String id = userData.getId();
+        String bearer = "Bearer " + jwt;
+        System.out.println(bearer);
+        System.out.println(id);
+        UserGraphql userGraphql = new UserGraphql(id, name, phone, address, password);
+        newUserData = new UserData(id, name, phone, userData.email, address, userData.score, jwt);
+        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+        request.setUrl(Constants.GRAPHQL_URL);
+        EditUserGraphqlRequest contentRequest = new EditUserGraphqlRequest(userGraphql);
+        System.out.println(json.prettyPrint(contentRequest));
+        request.setContent(json.prettyPrint(contentRequest));
         request.setHeader("Content-Type", "application/json");
-        request.setHeader("Authorization", "Token token=" + UserData.getToken());
+        request.setHeader("Authorization", bearer);
         request.setTimeOut(Constants.TIMEOUT);
 
         Net.HttpResponseListener listener = new Net.HttpResponseListener() {
@@ -366,11 +398,15 @@ public class EditProfileScreen implements Screen {
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 int statusCode = httpResponse.getStatus().getStatusCode();
                 System.out.println("Status code " + httpResponse.getStatus().getStatusCode());
-                System.out.println("Result: " + httpResponse.getResultAsString());
-                if ( statusCode != 200) {
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                JsonValue data = jsonResponse.get("data");
+                System.out.println("Result: " + responseString);
+                if ( statusCode != 200 || (data.get("updateUser").isNull() || data.get("updateUser").get("user").isNull())) {
                     refuse(statusCode);
                 }
                 else {
+                    // debo cambiar esto
                     isAuthenticated = true;
                     newUserData.save();
                 }
@@ -391,6 +427,7 @@ public class EditProfileScreen implements Screen {
         lblError.setVisible(true);
         btnSave.setVisible(false);
     }
+
     private void refuse(int statusCode){
 
         // form validation
@@ -398,6 +435,7 @@ public class EditProfileScreen implements Screen {
             if (statusCode == Constants.EMPTY_FIELDS) {
                 lblError.setText(Constants.EMPTY_FIELD_MSG);
             }
+/*
 
             else if (statusCode == Constants.INVALID_RUT) {
                 lblError.setText(Constants.INVALID_RUT_MSG);
@@ -406,6 +444,7 @@ public class EditProfileScreen implements Screen {
             else if (statusCode == Constants.INVALID_EMAIL_FORMAT) {
                 lblError.setText(Constants.INVALID_EMAIL_FORMAT_MSG);
             }
+*/
 
             else if (statusCode == Constants.PASSWORD_TOO_SHORT) {
                 lblError.setText(Constants.PASSWORD_TOO_SHORT_MSG);
@@ -436,30 +475,6 @@ public class EditProfileScreen implements Screen {
         passField.setText("");
         lblError.setVisible(true);
         btnSave.setVisible(true);
-    }
-
-    private boolean validRut(String rut) {
-        boolean valid = false;
-        try {
-            rut =  rut.toUpperCase();
-            rut = rut.replace(".", "");
-            rut = rut.replace("-", "");
-            int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
-
-            char dv = rut.charAt(rut.length() - 1);
-
-            int m = 0, s = 1;
-            for (; rutAux != 0; rutAux /= 10) {
-                s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
-            }
-            if (dv == (char) (s != 0 ? s + 47 : 75)) {
-                valid = true;
-            }
-
-        } catch (java.lang.NumberFormatException e) {
-        } catch (Exception e) {
-        }
-        return valid;
     }
 }
 

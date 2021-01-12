@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 
 import com.badlogic.gdx.Gdx;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,10 +29,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.main.MainGame;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
 
 
 public class GameCalibrationScreen implements Screen {
@@ -44,7 +45,7 @@ public class GameCalibrationScreen implements Screen {
     private Skin emgoneSkin;
     private Skin emgoneImages;
 
-    private com.hachimanzur.loica.util.GamePreferences prefs;
+    private GamePreferences prefs;
 
     private boolean showGameConfig = true;
     private Table gamePage;
@@ -66,7 +67,7 @@ public class GameCalibrationScreen implements Screen {
 
     private Stage stage;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
 
     public GameCalibrationScreen(MainGame game) {
         this.game = game;
@@ -74,7 +75,7 @@ public class GameCalibrationScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
         rebuildStage();
@@ -132,13 +133,13 @@ public class GameCalibrationScreen implements Screen {
     }
 
     private void saveSettings() {
-        prefs = com.hachimanzur.loica.util.GamePreferences.instance;
+        prefs = GamePreferences.instance;
 
         prefs.obstacleMode = (String)obsModeSelectBox.getSelected();
         prefs.gameTime = Integer.parseInt(tfGameTime.getText());
         prefs.bodyPart = (String)bodyPartSelectBox.getSelected();
         prefs.strengthThreshold = 1/(sldDifficulty.getValue());
-        if(com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get((String)obsModeSelectBox.getSelected()).equals("force")) {
+        if(Constants.OBSTACLE_MODES.get((String)obsModeSelectBox.getSelected()).equals("force")) {
             prefs.forceDuration = (int)period;
         }
         prefs.maxCalibrationHeight = maxCalibrationHeight;
@@ -150,22 +151,22 @@ public class GameCalibrationScreen implements Screen {
         prefs = GamePreferences.instance;
         prefs.load();
 
-        playerLevel = com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel();
-        velocity = com.hachimanzur.loica.util.Gamification.Gamification.velocityForLevel(playerLevel) * 400;
-        if (com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
-            nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getForceDistance(playerLevel);
-            period = com.hachimanzur.loica.util.Constants.calculateForcePeriod(nearnessFactor);
+        playerLevel = Gamification.getCurrentLevel();
+        velocity = Gamification.velocityForLevel(playerLevel) * 400;
+        if (Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
+            nearnessFactor = Gamification.getForceDistance(playerLevel);
+            period = Constants.calculateForcePeriod(nearnessFactor);
         } else {
-            nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getNearness(playerLevel);
-            period = com.hachimanzur.loica.util.Constants.calculatePeriod(velocity, nearnessFactor);
+            nearnessFactor = Gamification.getNearness(playerLevel);
+            period = Constants.calculatePeriod(velocity, nearnessFactor);
         }
 
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS));
 
         Table layerBackground = buildBackgroundLayer();
         Table layerControls = buildControlsLayer();
@@ -174,7 +175,7 @@ public class GameCalibrationScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControls);
 
@@ -193,7 +194,7 @@ public class GameCalibrationScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         Image imgBackground = new Image(emgoneImages, "Fondo_configuracion");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
         Image imgBackgroundBottom = new Image(emgoneImages, "Fondobottom_configuracion");
         layer.addActor(imgBackgroundBottom);
         imgBackgroundBottom.setSize(stage.getWidth(), stage.getHeight()/4);
@@ -216,7 +217,7 @@ public class GameCalibrationScreen implements Screen {
         Label conf = new Label("CONFIGURACIÓN", emgoneSkin, "big-title");
         layer.add(conf).expand().row();
 
-        layer.add(buildCalibrationLayer()).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.8f).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.7f).expand().fillY().row();
+        layer.add(buildCalibrationLayer()).width(Constants.VIEWPORT_WIDTH*0.8f).height(Constants.VIEWPORT_HEIGHT*0.7f).expand().fillY().row();
 
         btnSave = new TextButton("GUARDAR", emgoneSkin, "btn-black");
         layer.add(btnSave).expand();
@@ -257,19 +258,19 @@ public class GameCalibrationScreen implements Screen {
         page.add(obsMode).colspan(3).expandY();
         page.row().padBottom(padBottomSections);
         obsModeSelectBox = new SelectBox(emgoneSkin);
-        obsModeSelectBox.setItems(com.hachimanzur.loica.util.Constants.OBSTACLE_MODES_NAMES);
+        obsModeSelectBox.setItems(Constants.OBSTACLE_MODES_NAMES);
         page.add(obsModeSelectBox).width(400).height(60).center().colspan(3).row();
         obsModeSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get((String)obsModeSelectBox.getSelected()).equals("force")) {
-                    nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getForceDistance(playerLevel);
-                    period = com.hachimanzur.loica.util.Constants.calculateForcePeriod(nearnessFactor);
+                if (Constants.OBSTACLE_MODES.get((String)obsModeSelectBox.getSelected()).equals("force")) {
+                    nearnessFactor = Gamification.getForceDistance(playerLevel);
+                    period = Constants.calculateForcePeriod(nearnessFactor);
                     periodHeader.setText("Duración de los obstáculos:");
                     periodNumber.setText(String.format("%.0f", period) + " segs");
                 } else {
-                    nearnessFactor = com.hachimanzur.loica.util.Gamification.Gamification.getNearness(playerLevel);
-                    period = com.hachimanzur.loica.util.Constants.calculatePeriod(velocity, nearnessFactor);
+                    nearnessFactor = Gamification.getNearness(playerLevel);
+                    period = Constants.calculatePeriod(velocity, nearnessFactor);
                     periodHeader.setText("Periodicidad de los obstáculos:");
                     periodNumber.setText(String.format("%.01f", period) + " segs");
                 }
@@ -301,7 +302,7 @@ public class GameCalibrationScreen implements Screen {
 
         page.row();
         String periodString = "Periodicidad de los obstáculos:";
-        if (com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
+        if (Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
             periodString = "Duración de los obstáculos:";
         }
         periodHeader = new Label(periodString, emgoneSkin, "stats-header");
@@ -309,7 +310,7 @@ public class GameCalibrationScreen implements Screen {
 
         page.row().padBottom(padBottomStats);
         String periodFormat = "%.01f";
-        if (com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
+        if (Constants.OBSTACLE_MODES.get(prefs.obstacleMode).equals("force")) {
             periodFormat = "%.0f";
         }
         periodNumber = new Label(String.format(periodFormat, period) + " segs", emgoneSkin, "stats-parameters");
@@ -346,7 +347,7 @@ public class GameCalibrationScreen implements Screen {
         page.add(bodyPart).colspan(COLSPAN).expandY();
         page.row().padBottom(padBottomSections);
         bodyPartSelectBox = new SelectBox(emgoneSkin);
-        bodyPartSelectBox.setItems(com.hachimanzur.loica.util.Constants.BODY_PARTS_LIST);
+        bodyPartSelectBox.setItems(Constants.BODY_PARTS_LIST);
         page.add(bodyPartSelectBox).width(400).height(60).center().colspan(COLSPAN).row();
 
         page.add(new SplitPane(null, null, true, emgoneSkin))
@@ -364,8 +365,8 @@ public class GameCalibrationScreen implements Screen {
             @Override
             public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
                 int currentGameTime = "".equals(tfGameTime.getText()) ? 0 : Integer.parseInt(tfGameTime.getText());
-                if (!focused && currentGameTime < com.hachimanzur.loica.util.Constants.MIN_EXERCISE_TIME) {
-                    tfGameTime.setText(String.valueOf(com.hachimanzur.loica.util.Constants.MIN_EXERCISE_TIME));
+                if (!focused && currentGameTime < Constants.MIN_EXERCISE_TIME) {
+                    tfGameTime.setText(String.valueOf(Constants.MIN_EXERCISE_TIME));
                 }
             }
         });
@@ -374,8 +375,8 @@ public class GameCalibrationScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int currentGameTime = Integer.parseInt(tfGameTime.getText());
-                if(currentGameTime > com.hachimanzur.loica.util.Constants.MIN_EXERCISE_TIME){
-                    tfGameTime.setText(String.valueOf(currentGameTime- com.hachimanzur.loica.util.Constants.DELTA_EXCERCISE_TIME));
+                if(currentGameTime > Constants.MIN_EXERCISE_TIME){
+                    tfGameTime.setText(String.valueOf(currentGameTime-Constants.DELTA_EXCERCISE_TIME));
                 }
             }
         });
@@ -385,7 +386,7 @@ public class GameCalibrationScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int currentGameTime = Integer.parseInt(tfGameTime.getText());
-                tfGameTime.setText(String.valueOf(currentGameTime+ Constants.DELTA_EXCERCISE_TIME));
+                tfGameTime.setText(String.valueOf(currentGameTime+Constants.DELTA_EXCERCISE_TIME));
             }
         });
 

@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -23,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Constants;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
 
 import java.util.regex.Pattern;
 
@@ -73,7 +73,7 @@ public class RecoverScreen implements Screen {
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.LoginScreen(game));
+            game.setScreen(new LoginScreen(game));
         }
     }
 

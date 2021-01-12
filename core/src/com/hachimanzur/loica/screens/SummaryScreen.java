@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 
 import com.badlogic.gdx.Gdx;
@@ -6,33 +6,42 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.loicas.AbstractLoicaCostume;
-import com.hachimanzur.loica.loicas.NormalLoica;
-import com.hachimanzur.loica.loicas.QueenLoica;
-import com.hachimanzur.loica.loicas.SpartanLoica;
-import com.hachimanzur.loica.loicas.SuperLoica;
-import com.hachimanzur.loica.loicas.WizardLoica;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.stages.AbstractEMGStage;
-import com.hachimanzur.loica.stages.CityStage;
-import com.hachimanzur.loica.stages.DesertStage;
-import com.hachimanzur.loica.stages.ForestStage;
-import com.hachimanzur.loica.util.GamePreferences;
+import com.nursoft.emgone.loicas.AbstractLoicaCostume;
+import com.nursoft.emgone.loicas.NormalLoica;
+import com.nursoft.emgone.loicas.QueenLoica;
+import com.nursoft.emgone.loicas.SpartanLoica;
+import com.nursoft.emgone.loicas.SuperLoica;
+import com.nursoft.emgone.loicas.WizardLoica;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.stages.AbstractEMGStage;
+import com.nursoft.emgone.stages.CityStage;
+import com.nursoft.emgone.stages.DesertStage;
+import com.nursoft.emgone.stages.ForestStage;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
 
 import java.text.DecimalFormat;
 
@@ -43,7 +52,7 @@ public class SummaryScreen implements Screen {
     private Skin emgoneImages;
     private Skin emgoneSelect;
 
-    private com.hachimanzur.loica.util.GamePreferences prefs;
+    private GamePreferences prefs;
 
     private AbstractEMGStage selectedStage;
     private AbstractLoicaCostume selectedCostume;
@@ -56,7 +65,7 @@ public class SummaryScreen implements Screen {
 
     private Stage stage;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
     private boolean isPractice;
 
     public SummaryScreen(MainGame game, boolean isPractice) {
@@ -66,7 +75,7 @@ public class SummaryScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
         rebuildStage();
@@ -81,7 +90,7 @@ public class SummaryScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.InitialScreen(game));
+            game.setScreen(new InitialScreen(game));
         }
 
     }
@@ -118,31 +127,31 @@ public class SummaryScreen implements Screen {
         prefs.load();
 
         switch (prefs.costume) {
-            case com.hachimanzur.loica.util.Constants.NORMAL_LOICA:
+            case Constants.NORMAL_LOICA:
                 selectedCostume = new NormalLoica();
                 break;
-            case com.hachimanzur.loica.util.Constants.SUPER_LOICA:
+            case Constants.SUPER_LOICA:
                 selectedCostume = new SuperLoica();
                 break;
-            case com.hachimanzur.loica.util.Constants.SPARTAN_LOICA:
+            case Constants.SPARTAN_LOICA:
                 selectedCostume = new SpartanLoica();
                 break;
-            case com.hachimanzur.loica.util.Constants.QUEEN_LOICA:
+            case Constants.QUEEN_LOICA:
                 selectedCostume = new QueenLoica();
                 break;
-            case com.hachimanzur.loica.util.Constants.WIZARD_LOICA:
+            case Constants.WIZARD_LOICA:
                 selectedCostume = new WizardLoica();
                 break;
         }
 
         switch (prefs.scenario) {
-            case com.hachimanzur.loica.util.Constants.DESERT:
+            case Constants.DESERT:
                 selectedStage = new DesertStage();
                 break;
-            case com.hachimanzur.loica.util.Constants.CITY:
+            case Constants.CITY:
                 selectedStage = new CityStage();
                 break;
-            case com.hachimanzur.loica.util.Constants.FOREST:
+            case Constants.FOREST:
                 selectedStage = new ForestStage();
                 break;
         }
@@ -150,13 +159,13 @@ public class SummaryScreen implements Screen {
         isNight = prefs.isNight;
 
         // Si esto es fuerza/resistencia, ajustar tiempo mínimo si es necesario
-        String gameModeKey = com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(prefs.obstacleMode);
+        String gameModeKey = Constants.OBSTACLE_MODES.get(prefs.obstacleMode);
         if (gameModeKey.equals("force")) {
             float distanceForce = prefs.distanceBetweenObstaclesFactor;
             if (!isPractice) {
-                distanceForce = com.hachimanzur.loica.util.Gamification.Gamification.getForceDistance(com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel());
+                distanceForce = Gamification.getForceDistance(Gamification.getCurrentLevel());
             }
-            float periodForce = com.hachimanzur.loica.util.Constants.calculateForcePeriod(distanceForce);
+            float periodForce = Constants.calculateForcePeriod(distanceForce);
             if (prefs.gameTime < periodForce) {
                 prefs.gameTime = Math.round(periodForce);
                 prefs.save();
@@ -167,12 +176,12 @@ public class SummaryScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS));
-        emgoneSelect = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.SELECT_COSTUME_ATLAS));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS));
+        emgoneSelect = new Skin(new TextureAtlas(Constants.SELECT_COSTUME_ATLAS));
 
         loadSettings();
 
@@ -183,7 +192,7 @@ public class SummaryScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControls);
     }
@@ -191,7 +200,7 @@ public class SummaryScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         Image imgBackground = new Image(emgoneSelect, "bg_summary");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
         Image imgBackgroundBottom = new Image(emgoneImages, "Fondobottom_configuracion");
         layer.addActor(imgBackgroundBottom);
         imgBackgroundBottom.setSize(stage.getWidth(), stage.getHeight()/4);
@@ -215,7 +224,7 @@ public class SummaryScreen implements Screen {
         Label title = new Label("RESUMEN", emgoneSkin, "big-title");
         layer.add(title).center().colspan(2).expand().row();
 
-        layer.add(buildCalibrationLayer()).colspan(2).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.8f).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.7f).expand().fillY().row();
+        layer.add(buildCalibrationLayer()).colspan(2).width(Constants.VIEWPORT_WIDTH*0.8f).height(Constants.VIEWPORT_HEIGHT*0.7f).expand().fillY().row();
 
         goRecalibrate = new TextButton("RECALIBRAR", emgoneSkin, "btn-black-big");
         if (game.isCalibrated) {
@@ -253,20 +262,20 @@ public class SummaryScreen implements Screen {
         // window.debug();
 
         String gameMode = prefs.obstacleMode;
-        if (gameMode.isEmpty()) gameMode = com.hachimanzur.loica.util.Constants.OBSTACLE_MODES_NAMES.first();
-        String gameModeKey = com.hachimanzur.loica.util.Constants.OBSTACLE_MODES.get(gameMode);
+        if (gameMode.isEmpty()) gameMode = Constants.OBSTACLE_MODES_NAMES.first();
+        String gameModeKey = Constants.OBSTACLE_MODES.get(gameMode);
         int obstacleSize = 25 + (25 * prefs.obstacleMaxHeightFactor);
         float obstaclePeriod = prefs.periodFactor;
         float nearness = prefs.distanceBetweenObstaclesFactor;
         if (!isPractice) {
-            int playerLevel = com.hachimanzur.loica.util.Gamification.Gamification.getCurrentLevel();
-            float velocity = com.hachimanzur.loica.util.Gamification.Gamification.velocityForLevel(playerLevel) * 400;
+            int playerLevel = Gamification.getCurrentLevel();
+            float velocity = Gamification.velocityForLevel(playerLevel) * 400;
             if (gameModeKey.equals("force")) {
-                nearness = com.hachimanzur.loica.util.Gamification.Gamification.getForceDistance(playerLevel);
+                nearness = Gamification.getForceDistance(playerLevel);
             } else {
-                nearness = com.hachimanzur.loica.util.Gamification.Gamification.getNearness(playerLevel);
+                nearness = Gamification.getNearness(playerLevel);
             }
-            obstaclePeriod = (float) com.hachimanzur.loica.util.Constants.calculatePeriod(velocity, nearness);
+            obstaclePeriod = (float)Constants.calculatePeriod(velocity, nearness);
         }
         String bodyPart = prefs.bodyPart;
         int gameTime = prefs.gameTime;
@@ -308,7 +317,7 @@ public class SummaryScreen implements Screen {
         if (gameModeKey.equals("force")) {
             opTitleString = "Duración de obstáculos: ";
             opDescription = "Aprox. ";
-            obstaclePeriod = com.hachimanzur.loica.util.Constants.calculateForcePeriod(nearness);
+            obstaclePeriod = Constants.calculateForcePeriod(nearness);
             opFormat.applyPattern("#");
         }
         Label opTitle = new Label(opTitleString, emgoneSkin, "config-header");
@@ -323,9 +332,9 @@ public class SummaryScreen implements Screen {
             Label rtTitle = new Label("Proporción de descanso: ", emgoneSkin, "config-header");
             float restMultiplier;
             if (isPractice) {
-                restMultiplier = com.hachimanzur.loica.util.Constants.getRestMultiplier(prefs.forceRest);
+                restMultiplier = Constants.getRestMultiplier(prefs.forceRest);
             } else {
-                restMultiplier = com.hachimanzur.loica.util.Gamification.Gamification.getRestForLevel(Gamification.getCurrentLevel());
+                restMultiplier = Gamification.getRestForLevel(Gamification.getCurrentLevel());
             }
             Label rtValue = new Label(new DecimalFormat("#.##").format(restMultiplier) + "x", emgoneSkin, "config-value");
             restTimeLine.add(rtTitle);
@@ -336,7 +345,7 @@ public class SummaryScreen implements Screen {
         window.row();
         Table bodyPartLine = new Table();
         Label bpTitle = new Label("Zona del cuerpo a ejercitar: ", emgoneSkin, "config-header");
-        Label bpValue = new Label(com.hachimanzur.loica.util.Constants.shortBodyPart(bodyPart), emgoneSkin, "config-value");
+        Label bpValue = new Label(Constants.shortBodyPart(bodyPart), emgoneSkin, "config-value");
         bodyPartLine.add(bpTitle);
         bodyPartLine.add(bpValue);
         window.add(bodyPartLine).colspan(2).left().spaceBottom(spacingLines);
@@ -385,7 +394,7 @@ public class SummaryScreen implements Screen {
 
         Image selectedLoicaImage = new Image(emgoneSelect, "loica" + Integer.toString(loicaCostume) + "_bg");
         Image selectedScenarioImage = new Image(emgoneSelect, "scene_" + Integer.toString(scenario) + "_big");
-        Label selectedLoicaText = new Label(com.hachimanzur.loica.util.Constants.LOICA_NAMES.get(loicaCostume), emgoneSkin, "selected-costume-small");
+        Label selectedLoicaText = new Label(Constants.LOICA_NAMES.get(loicaCostume), emgoneSkin, "selected-costume-small");
         Label selectedScenarioText = new Label(Constants.SCENARIO_NAMES.get(scenario), emgoneSkin, "selected-costume-small");
         selectedLoicaImage.setScaling(Scaling.fit);
         selectedScenarioImage.setScaling(Scaling.fit);

@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.util;
+package com.nursoft.emgone.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -35,12 +35,13 @@ public class Constants {
     private static final String HOST = "http://emgone.cl";
     private static final String PORT = "80";
 
-    public static final String LOGIN_URL = HOST + ":" + PORT + "/api/v1/users/sessions";
+    //public static final String LOGIN_URL = HOST + ":" + PORT + "/api/v1/users/sessions";
+    //public static final String EDIT_PROFILE_URL = HOST + ":" + PORT + "/api/v1/users/me";
+    //public static final String POST_GAME_DATA_URL = HOST + ":" + PORT + "/api/v1/exercises";
+    //public static final String EXERCISES_PAGE_URL = HOST + ":" + PORT + "/api/v1/exercises?page=";
+    public static final String GRAPHQL_URL = "https://compsci.cl/emg-one/graphql";
     public static final String REGISTER_URL = HOST + ":" + PORT + "/api/v1/users";
-    public static final String EDIT_PROFILE_URL = HOST + ":" + PORT + "/api/v1/users/me";
     public static final String RECOVERY_URL = HOST + ":" + PORT + "/api/v1/users/me/recovery";
-    public static final String POST_GAME_DATA_URL = HOST + ":" + PORT + "/api/v1/exercises";
-    public static final String EXERCISES_PAGE_URL = HOST + ":" + PORT + "/api/v1/exercises?page=";
     public static final String ACHIEVEMENTS_PAGE_URL = HOST + ":" + PORT + "/api/v1/achievements?page=";
     public static final String POST_ACHIEVEMENTS_URL = HOST + ":" + PORT + "/api/v1/achievements";
 

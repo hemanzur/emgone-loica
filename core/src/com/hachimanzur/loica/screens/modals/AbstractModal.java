@@ -1,10 +1,10 @@
-package com.hachimanzur.loica.screens.modals;
+package com.nursoft.emgone.screens.modals;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
-import com.hachimanzur.loica.util.Constants;
+import com.nursoft.emgone.util.Constants;
 
 
 public abstract class AbstractModal implements Disposable {

@@ -1,8 +1,9 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -25,11 +26,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.util.UserData;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
+import com.nursoft.emgone.util.UserData;
 
 
 public class AchievementsScreen implements Screen {
@@ -99,7 +100,7 @@ public class AchievementsScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.ProfileScreen(game));
+            game.setScreen(new ProfileScreen(game));
         }
     }
 

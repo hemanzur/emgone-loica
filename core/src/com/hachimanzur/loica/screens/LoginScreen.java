@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -23,13 +23,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.UserData;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.UserData;
 
+import java.io.InputStream;
 import java.util.regex.Pattern;
+
+import jdk.nashorn.internal.parser.JSONParser;
+import sun.rmi.runtime.Log;
 
 
 public class LoginScreen implements Screen {
@@ -47,13 +53,28 @@ public class LoginScreen implements Screen {
     TextButton btnRegister;
     TextButton btnRecover;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
     private Skin emgoneSkin;
     private Skin emgoneImages;
+    private UserCredentials userCredentials;
 
-    public LoginScreen(MainGame g){
+    public LoginScreen(MainGame g) {
         this.game = g;
-        pattern = Pattern.compile(com.hachimanzur.loica.util.Constants.EMAIL_PATTERN);
+        pattern = Pattern.compile(Constants.EMAIL_PATTERN);
+    }
+
+    class UserCredentials {
+        private String jwt;
+        private String id;
+        private String email;
+        private String password;
+
+        UserCredentials(String jwt, String id, String email, String password) {
+            this.jwt = jwt;
+            this.id = id;
+            this.email = email;
+            this.password = password;
+        }
     }
 
     class User {
@@ -66,17 +87,66 @@ public class LoginScreen implements Screen {
         }
     }
 
-    class Data {
-        private User user;
+    class UserGraphql {
+        private String usuario;
+        private String password;
 
-        Data(User u){
-            user = u;
+        UserGraphql(String e, String p) {
+            usuario = e;
+            password = p;
         }
     }
 
+    class LoginGraphqlRequest {
+        private UserGraphql variables;
+        private String query;
+        private String operationName;
+
+        LoginGraphqlRequest(UserGraphql user) {
+            operationName = "autenticarse";
+            query = "mutation autenticarse($usuario: String!, $password: String!) {" +
+                    "    login(input: {identifier: $usuario, password: $password}) {" +
+                    "      jwt, " +
+                    "      user {" +
+                    "        id, " +
+                    "        role {" +
+                    "          name" +
+                    "        }" +
+                    "      }" +
+                    "    }" +
+                    "  }";
+            variables = user;
+        }
+    }
+
+    class UserGraphqlRequest {
+        private String variables;
+        private String query;
+        private String operationName;
+
+        UserGraphqlRequest(String id) {
+            operationName = "obtenerDatosUsuarios";
+            query = "query obtenerDatosUsuarios($id: ID!) {" +
+                    "    user(id: $id) {" +
+                    "      id, " +
+                    "      nombre, " +
+                    "      telefono, " +
+                    "      email, " +
+                    "      direccion " +
+                    "    }" +
+                    "  }";
+            variables = " { \"id\": \""+ id + "\" }";
+        }
+    }
+  /*  class ResponseData {
+        String errors;
+        String data;
+        ResponseData () {}
+    }
+*/
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         isAuthenticated = false;
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
@@ -131,11 +201,11 @@ public class LoginScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS));
 
         Table layerBackground = buildBackgroundLayer();
         Table layerControlButtons = buildControlsLayer();
@@ -145,7 +215,7 @@ public class LoginScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControlButtons);
 
@@ -164,7 +234,7 @@ public class LoginScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         Image imgBackground = new Image(emgoneImages, "initial-bg");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
 
         Image btnLogo = new Image(emgoneImages, "logologin");
 
@@ -183,23 +253,35 @@ public class LoginScreen implements Screen {
         layer.add(loginLabel).padBottom(50).row();
         loginLabel.setPosition(stage.getWidth()/2 - loginLabel.getWidth()/2, 480);
 
-        // Input email
-        emailField = new TextField("", emgoneSkin);
-        emailField.setMessageText("Email");
+        // Obtener email y password guardados
+        String textPassword = UserData.getPassword();
+        if (textPassword == null) {
+            textPassword = "";
+        }
+        String textEmail = UserData.getEmail();
+        if (textEmail == null) {
+            textPassword = "";
+            textEmail = "";
+        }
+
+        emailField = new TextField(textEmail, emgoneSkin);
+        if (textEmail == "") emailField.setMessageText("Email");
         layer.add(emailField).padBottom(15).width(stage.getWidth()*0.7f).row();
         emailField.setAlignment(Align.center);
         emailField.setPosition(stage.getWidth()/2 - emailField.getWidth()/2, 380);
 
         // Input contraseña
         passwordField = new TextField("", emgoneSkin);
-        passwordField.setMessageText("Contraseña");
-        layer.add(passwordField).padBottom(50).width(stage.getWidth()*0.7f).row();
-        passwordField.setAlignment(Align.center);
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
+        passwordField.setText(textPassword);
+        if (textPassword == "") passwordField.setMessageText("Contraseña");
+        layer.add(passwordField).padBottom(50).width(stage.getWidth()*0.7f).row();
+        passwordField.setAlignment(Align.center);
 
         passwordField.setPosition(stage.getWidth()/2 - passwordField
                 .getWidth()/2, 300);
+
 
         // Login button
         btnLogin = new TextButton("INICIAR SESIÓN", emgoneSkin);
@@ -245,46 +327,62 @@ public class LoginScreen implements Screen {
 
     private boolean areCredentialsValid(String email, String password) {
         if ("".equals(email) || "".equals(password)) {
-            refuse(com.hachimanzur.loica.util.Constants.EMPTY_FIELDS);
+            refuse(Constants.EMPTY_FIELDS);
             return false;
         }
         else if (!pattern.matcher(email).matches()) {
-            refuse(com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT);
+            refuse(Constants.INVALID_EMAIL_FORMAT);
             return false;
         }
         else return true;
     }
 
-    private void postCredentials(String email, String password) {
+    private UserData parseLoginResponse(JsonValue data, UserCredentials user) {
+        String id = data.getString("id");
+        String name = data.getString("nombre");
+        String phone = data.getString("telefono");
+        String email = data.getString("email");
+        String address = data.getString("direccion");
+        int score = 1; //data.getString("score");
+        UserData u = new UserData(id, name, phone, email, address, score, user.jwt, user.password);
+        return u;
+    }
+
+    private void postCredentials(final String email, final String password) {
         Json json = new Json();
         json.setOutputType(OutputType.json);
 
-        User user = new User(email, password);
-        Data data = new Data(user);
+        UserGraphql userGraphql = new UserGraphql(email, password);
+        LoginGraphqlRequest contentRequest = new LoginGraphqlRequest(userGraphql);
+        System.out.println(json.prettyPrint(contentRequest));
 
         HttpRequest request = new HttpRequest(HttpMethods.POST);
-        request.setUrl(com.hachimanzur.loica.util.Constants.LOGIN_URL);
-        request.setContent(json.prettyPrint(data));
+        request.setUrl(Constants.GRAPHQL_URL);
+        request.setContent(json.prettyPrint(contentRequest));
         request.setHeader("Content-Type", "application/json");
-        request.setTimeOut(com.hachimanzur.loica.util.Constants.TIMEOUT);
+        request.setTimeOut(Constants.TIMEOUT);
 
         HttpResponseListener listener = new HttpResponseListener() {
             @Override
             public void handleHttpResponse(HttpResponse httpResponse) {
                 int statusCode = httpResponse.getStatus().getStatusCode();
                 System.out.println("Status code " + statusCode);
-                if (statusCode != 200) {
-                    refuse(statusCode);
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                System.out.println(jsonResponse);
+                JsonValue data = jsonResponse.get("data");
+                if (statusCode != 200 || data.isNull()) {
+                    JsonValue err = jsonResponse.get("errors").get(0);
+                    refuseGraphql(err);
                 }
                 else {
-                    isAuthenticated = true;
-                    String response = httpResponse.getResultAsString();
                     System.out.println("Login response");
-                    System.out.println(response);
-                    Json json = new Json();
-                    com.hachimanzur.loica.util.UserData ud = json.fromJson(UserData.class, response);
-                    ud.save();
-                    System.out.println(response);
+                    System.out.println(data.toString());
+                    // Busco la informacion del usuario
+                    String jwt = data.get("login").getString("jwt");
+                    String id = data.get("login").get("user").getString("id");
+                    userCredentials = new UserCredentials(jwt, id, email, password);
+                    postUserData();
                 }
             }
             @Override
@@ -308,23 +406,48 @@ public class LoginScreen implements Screen {
         emailField.setVisible(false);
     }
 
+    private void refuseGraphql(JsonValue error){
+        String message = error.get("extensions").
+                get("exception").
+                get("data").
+                get("message").
+                get(0).
+                get("messages").
+                get(0).
+                getString("message");
+
+        if (message.equals("Identifier or password invalid.")) {
+            loginLabel.setText(Constants.INVALID_USER_PASS_MSG);
+        }
+        else {
+            loginLabel.setText("Otro error ocurrió: " + message);
+        }
+        loginLabel.getStyle().fontColor = Color.CORAL;
+        passwordField.setText("");
+        btnLogin.setVisible(true);
+        btnRecover.setVisible(true);
+        emailField.setVisible(true);
+        passwordField.setVisible(true);
+
+    }
+
     private void refuse(int statusCode){
         loginLabel.getStyle().fontColor = Color.CORAL;
         if (statusCode < 0) {
-            if (statusCode == com.hachimanzur.loica.util.Constants.EMPTY_FIELDS) {
-                loginLabel.setText(com.hachimanzur.loica.util.Constants.EMPTY_FIELD_MSG);
+            if (statusCode == Constants.EMPTY_FIELDS) {
+                loginLabel.setText(Constants.EMPTY_FIELD_MSG);
             }
 
-            else if (statusCode == com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT) {
-                loginLabel.setText(com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT_MSG);
+            else if (statusCode == Constants.INVALID_EMAIL_FORMAT) {
+                loginLabel.setText(Constants.INVALID_EMAIL_FORMAT_MSG);
             }
 
             else {
-                loginLabel.setText(com.hachimanzur.loica.util.Constants.FORM_WITH_ERRORS_MSG);
+                loginLabel.setText(Constants.FORM_WITH_ERRORS_MSG);
             }
         }
         else if (statusCode == 401) {
-            loginLabel.setText(com.hachimanzur.loica.util.Constants.INVALID_USER_PASS_MSG);
+            loginLabel.setText(Constants.INVALID_USER_PASS_MSG);
         }
         else if (statusCode == 503) {
             loginLabel.setText(Constants.CONNECTION_ERROR_MSG);
@@ -338,6 +461,58 @@ public class LoginScreen implements Screen {
         btnRecover.setVisible(true);
         emailField.setVisible(true);
         passwordField.setVisible(true);
+    }
+
+    private void postUserData() {
+        Json json = new Json();
+        json.setOutputType(OutputType.json);
+        HttpRequest request = new HttpRequest(HttpMethods.POST);
+        request.setUrl(Constants.GRAPHQL_URL);
+        UserGraphqlRequest contentRequest = new UserGraphqlRequest(userCredentials.id);
+        System.out.println(json.prettyPrint(contentRequest));
+        request.setContent(json.prettyPrint(contentRequest));
+        request.setHeader("Content-Type", "application/json");
+        request.setHeader("Authorization", "Bearer " + userCredentials.jwt);
+        request.setTimeOut(Constants.TIMEOUT);
+
+        HttpResponseListener listener = new HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(HttpResponse httpResponse) {
+                int statusCode = httpResponse.getStatus().getStatusCode();
+                System.out.println("Status code " + statusCode);
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                System.out.println(jsonResponse);
+                JsonValue data = jsonResponse.get("data");
+                if (statusCode != 200 || data.isNull()) {
+                    isAuthenticated = false;
+                    userCredentials = null;
+                    JsonValue err = jsonResponse.get("errors").get(0);
+                    refuseGraphql(err);
+                } else {
+                    isAuthenticated = true;
+                    System.out.println("User data response");
+                    System.out.println(data.toString());
+
+                    // Debo guardar los datos del usuario
+                    UserData ud = parseLoginResponse(data.get("user"), userCredentials);
+                    ud.save();
+                }
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                refuse(503);
+                System.out.println("Failed " + t.getMessage());
+            }
+
+            @Override
+            public void cancelled() {
+                System.out.println("Cancelled");
+            }
+        };
+
+        Gdx.net.sendHttpRequest(request, listener);
     }
 }
 

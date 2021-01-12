@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,8 +24,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.main.MainGame;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
 
 import java.util.regex.Pattern;
 
@@ -58,7 +58,7 @@ public class RegisterScreen implements Screen {
     private TextButton btnRegister;
     private Label feedBackMsg;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
     private Skin emgoneSkin;
     private Skin emgoneImages;
 
@@ -68,7 +68,7 @@ public class RegisterScreen implements Screen {
 
     public RegisterScreen(MainGame game){
         this.game = game;
-        pattern = Pattern.compile(com.hachimanzur.loica.util.Constants.EMAIL_PATTERN);
+        pattern = Pattern.compile(Constants.EMAIL_PATTERN);
         supposedKeyboardHeight = 500;
         isKeyboardVisible = false;
         focusListener = new FocusListener() {
@@ -156,7 +156,7 @@ public class RegisterScreen implements Screen {
     }
 
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
         rebuildStage();
@@ -164,11 +164,11 @@ public class RegisterScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS));
 
         Table layerBackground = buildBackgroundLayer();
         layerControlButtons = buildControlsLayer();
@@ -179,7 +179,7 @@ public class RegisterScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControlButtons);
         stack.add(layerSuccess);
@@ -190,7 +190,7 @@ public class RegisterScreen implements Screen {
                     stage.setKeyboardFocus(null);
                     isKeyboardVisible = false;
                     Gdx.input.setOnscreenKeyboardVisible(false);
-                    stage.getCamera().position.y = com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT/2;
+                    stage.getCamera().position.y = Constants.VIEWPORT_HEIGHT/2;
                 }
                 return false;
             }
@@ -200,7 +200,7 @@ public class RegisterScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         imgBackground = new Image(emgoneImages, "initial-bg");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
         return layer;
     }
 
@@ -217,39 +217,41 @@ public class RegisterScreen implements Screen {
         // Input nombre
         nameField = new TextField("",emgoneSkin);
         nameField.setMessageText("Nombre *");
-        layer.add(nameField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(nameField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         nameField.setAlignment(Align.center);
 
         // Input rut
+/*
         rutField = new TextField("", emgoneSkin);
         rutField.setMessageText("R.U.T. (e.j. 11111111-1) *");
-        layer.add(rutField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(rutField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         rutField.setAlignment(Align.center);
+*/
 
         // Input telefono
         phoneField = new TextField("", emgoneSkin);
         phoneField.setMessageText("Teléfono");
-        layer.add(phoneField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(phoneField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         phoneField.setAlignment(Align.center);
 
         // Input email
         emailField = new TextField("", emgoneSkin);
         emailField.setMessageText("Email *");
-        layer.add(emailField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(emailField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         emailField.setAlignment(Align.center);
 
         // Input direccion
         addressField = new TextField("", emgoneSkin);
         addressField.setMessageText("Dirección");
 
-        layer.add(addressField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(addressField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         addressField.setAlignment(Align.center);
         addressField.addListener(focusListener);
 
         // Input contraseña
         passField = new TextField("", emgoneSkin);
         passField.setMessageText("Contraseña *");
-        layer.add(passField).padBottom(40).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(passField).padBottom(40).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         passField.setAlignment(Align.center);
         passField.setPasswordMode(true);
         passField.setPasswordCharacter('*');
@@ -258,7 +260,7 @@ public class RegisterScreen implements Screen {
         // Confirm password
         confirmPassField = new TextField("", emgoneSkin);
         confirmPassField.setMessageText("Confirme contraseña");
-        layer.add(confirmPassField).padBottom(20).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.7f).row();
+        layer.add(confirmPassField).padBottom(20).width(Constants.VIEWPORT_WIDTH*0.7f).row();
         confirmPassField.setAlignment(Align.center);
         confirmPassField.setPasswordMode(true);
         confirmPassField.setPasswordCharacter('*');
@@ -308,27 +310,27 @@ public class RegisterScreen implements Screen {
                 "".equals(password) ||
                 "".equals(confirmPass)
                 ) {
-            refuse(com.hachimanzur.loica.util.Constants.EMPTY_FIELDS);
+            refuse(Constants.EMPTY_FIELDS);
             return false;
         }
 
         else if (!validRut(rut)) {
-            refuse(com.hachimanzur.loica.util.Constants.INVALID_RUT);
+            refuse(Constants.INVALID_RUT);
             return false;
         }
 
         else if (!pattern.matcher(email).matches()) {
-            refuse(com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT);
+            refuse(Constants.INVALID_EMAIL_FORMAT);
             return false;
         }
 
         else if (password.length() < 8) {
-            refuse(com.hachimanzur.loica.util.Constants.PASSWORD_TOO_SHORT);
+            refuse(Constants.PASSWORD_TOO_SHORT);
             return false;
         }
 
         else if (!password.equals(confirmPass)) {
-            refuse(com.hachimanzur.loica.util.Constants.PASSWORDS_DONT_MATCH);
+            refuse(Constants.PASSWORDS_DONT_MATCH);
             return false;
         }
 
@@ -345,10 +347,10 @@ public class RegisterScreen implements Screen {
         Data data = new Data(user);
 
         Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
-        request.setUrl(com.hachimanzur.loica.util.Constants.REGISTER_URL);
+        request.setUrl(Constants.REGISTER_URL);
         request.setContent(json.prettyPrint(data));
         request.setHeader("Content-Type", "application/json");
-        request.setTimeOut(com.hachimanzur.loica.util.Constants.TIMEOUT);
+        request.setTimeOut(Constants.TIMEOUT);
 
         Net.HttpResponseListener listener = new Net.HttpResponseListener() {
             @Override
@@ -384,28 +386,28 @@ public class RegisterScreen implements Screen {
     private void refuse(int statusCode){
         // form validation
         if (statusCode < 0) {
-            if (statusCode == com.hachimanzur.loica.util.Constants.EMPTY_FIELDS) {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.EMPTY_FIELD_MSG);
+            if (statusCode == Constants.EMPTY_FIELDS) {
+                errorLbl.setText(Constants.EMPTY_FIELD_MSG);
             }
 
-            else if (statusCode == com.hachimanzur.loica.util.Constants.INVALID_RUT) {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.INVALID_RUT_MSG);
+            else if (statusCode == Constants.INVALID_RUT) {
+                errorLbl.setText(Constants.INVALID_RUT_MSG);
             }
 
-            else if (statusCode == com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT) {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.INVALID_EMAIL_FORMAT_MSG);
+            else if (statusCode == Constants.INVALID_EMAIL_FORMAT) {
+                errorLbl.setText(Constants.INVALID_EMAIL_FORMAT_MSG);
             }
 
-            else if (statusCode == com.hachimanzur.loica.util.Constants.PASSWORD_TOO_SHORT) {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.PASSWORD_TOO_SHORT_MSG);
+            else if (statusCode == Constants.PASSWORD_TOO_SHORT) {
+                errorLbl.setText(Constants.PASSWORD_TOO_SHORT_MSG);
             }
 
-            else if (statusCode == com.hachimanzur.loica.util.Constants.PASSWORDS_DONT_MATCH) {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.PASSWORD_TOO_SHORT_MSG);
+            else if (statusCode == Constants.PASSWORDS_DONT_MATCH) {
+                errorLbl.setText(Constants.PASSWORD_TOO_SHORT_MSG);
             }
 
             else {
-                errorLbl.setText(com.hachimanzur.loica.util.Constants.FORM_WITH_ERRORS_MSG);
+                errorLbl.setText(Constants.FORM_WITH_ERRORS_MSG);
             }
 
         }
@@ -416,7 +418,7 @@ public class RegisterScreen implements Screen {
         }
 
         else if (statusCode==503) {
-            errorLbl.setText(com.hachimanzur.loica.util.Constants.CONNECTION_ERROR_MSG);
+            errorLbl.setText(Constants.CONNECTION_ERROR_MSG);
         }
         else {
             errorLbl.setText("Otro error ocurrió: " + statusCode);
@@ -456,7 +458,7 @@ public class RegisterScreen implements Screen {
     private Table buildSuccessLayer() {
         layerSuccess = new Table();
         //layerSuccess.setDebug(true);
-        layerSuccess.pad(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.4f, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.15f, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.4f, Constants.VIEWPORT_HEIGHT*0.15f);
+        layerSuccess.pad(Constants.VIEWPORT_HEIGHT*0.4f, Constants.VIEWPORT_HEIGHT*0.15f, Constants.VIEWPORT_HEIGHT*0.4f, Constants.VIEWPORT_HEIGHT*0.15f);
         Label successLbl = new Label("¡Registro exitoso!", emgoneSkin);
         layerSuccess.add(successLbl).expand().top().row();
 

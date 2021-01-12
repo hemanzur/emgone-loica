@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 
 import com.badlogic.gdx.Gdx;
@@ -19,10 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.MicProcessor;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.MicProcessor;
 
 
 public class SensorCalibrationScreen implements Screen {
@@ -101,7 +101,7 @@ public class SensorCalibrationScreen implements Screen {
         imgLoicaCalib.setY(map(movingAverage, minCalibrationHeight, maxCalibrationHeight,  minLoicaHeight, maxLoicaHeight));
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.SummaryScreen(game, isPractice));
+            game.setScreen(new SummaryScreen(game, isPractice));
         }
 
         minElapsed += delta;
@@ -213,7 +213,7 @@ public class SensorCalibrationScreen implements Screen {
         btnBackToMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new com.hachimanzur.loica.screens.SummaryScreen(game, isPractice));
+                game.setScreen(new SummaryScreen(game, isPractice));
             }
         });
 

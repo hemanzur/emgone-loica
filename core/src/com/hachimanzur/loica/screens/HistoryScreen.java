@@ -1,8 +1,9 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,14 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.Gamification.Gamification;
-import com.hachimanzur.loica.util.UserData;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
+import com.nursoft.emgone.util.UserData;
 
 
 public class HistoryScreen implements Screen {
@@ -65,6 +68,7 @@ public class HistoryScreen implements Screen {
     private Table dataTable;
     private Cell dataTableCell;
     private Label lblError;
+    private int ROWS_PER_PAGE;
 
 
     public HistoryScreen(MainGame game){
@@ -74,7 +78,7 @@ public class HistoryScreen implements Screen {
         currentPage = 1;
 
         isDataLoaded = false;
-
+        ROWS_PER_PAGE = 10;
         emgoneSkin = new Skin(
                 Gdx.files.internal(Constants.EMGONE_SKIN),
                 new TextureAtlas(Constants.EMGONE_ATLAS)
@@ -93,7 +97,7 @@ public class HistoryScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.ProfileScreen(game));
+            game.setScreen(new ProfileScreen(game));
         }
     }
 
@@ -131,7 +135,7 @@ public class HistoryScreen implements Screen {
         Gdx.input.setCatchBackKey(true);
         loadSettings();
         rebuildStage();
-        getExercisesFromPage(currentPage);
+        getExercises(currentPage);
     }
 
     private void rebuildStage() {
@@ -235,7 +239,7 @@ public class HistoryScreen implements Screen {
                 if (currentPage > 1) {
                     currentPage -= 1;
                     isDataLoaded = false;
-                    getExercisesFromPage(currentPage);
+                    getExercises(currentPage);
                 }
             }
         });
@@ -249,7 +253,7 @@ public class HistoryScreen implements Screen {
                     currentPage += 1;
                     System.out.println("Current page: " + currentPage);
                     isDataLoaded = false;
-                    getExercisesFromPage(currentPage);
+                    getExercises(currentPage);
                 }
             }
         });
@@ -269,29 +273,79 @@ public class HistoryScreen implements Screen {
         return window;
     }
 
-    private void getExercisesFromPage(int page) {
-        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
-        request.setUrl(Constants.EXERCISES_PAGE_URL+page);
+    class GetExercisesGraphql {
+        private String variables;
+        private String query;
+        private String operationName;
+
+        GetExercisesGraphql(String id, int start, int limit) {
+            operationName = "obtenerEj";
+            query = "query obtenerEj(\n" +
+                    "  $id:ID!\n" +
+                    "  $start: Int\n" +
+                    "  $limit: Int\n" +
+                    ") {\n" +
+                    "  ejercicios (\n" +
+                    "    start: $start\n" +
+                    "    limit: $limit\n" +
+                    "    where : {\n" +
+                    "      user: $id\n" +
+                    "    }\n" +
+                    "  ) {\n" +
+                    "    tipo\n" +
+                    "    esquivados\n" +
+                    "    colisionados\n" +
+                    "    createdAt\n" +
+                    "  }\n" +
+                    "}";
+            variables = "{\n" +
+                    "  \"id\": \""+ id +"\",\n" +
+                    "  \"start\": "+ Integer.toString(start) +",\n" +
+                    "  \"limit\": "+  Integer.toString(limit) +"\n" +
+                    "}";;
+        }
+    }
+
+    private void getExercises(int page) {
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        String jwt = UserData.getToken();
+        String id = UserData.getId();
+        String bearer = "Bearer " + jwt;
+        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+        request.setUrl(Constants.GRAPHQL_URL);
+        int start = ROWS_PER_PAGE * (page - 1);
+        GetExercisesGraphql contentRequest = new GetExercisesGraphql(id, start, ROWS_PER_PAGE + 1);
+        request.setContent(json.prettyPrint(contentRequest));
+        System.out.println(json.prettyPrint(contentRequest));
         request.setHeader("Content-Type", "application/json");
-        request.setHeader("Authorization", "Token token=" + UserData.getToken());
+        request.setHeader("Authorization", bearer);
         request.setTimeOut(Constants.TIMEOUT);
 
         Net.HttpResponseListener listener = new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 int statusCode = httpResponse.getStatus().getStatusCode();
-                String response = httpResponse.getResultAsString();
-                System.out.println("Status code: " + statusCode);
-                System.out.println("Response : " + response);
-                storeExercisesAndTotalPages(response);
-                dataTableCell.setActor(buildDataTable(true));
-                isDataLoaded = true;
-                btnBack.setVisible(true);
+                System.out.println("Status code " + httpResponse.getStatus().getStatusCode());
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                JsonValue data = jsonResponse.get("data");
+                System.out.println("Response: " + responseString);
+                if ( statusCode != 200 || data.isNull()) {
+                    System.out.println("Failed " );
+                    lblError.setText(Constants.CONNECTION_ERROR_MSG);
+                }
+                else {
+                    storeExercisesAndTotalPages(data.get("ejercicios"));
+                    lblError.setText("");
+                    dataTableCell.setActor(buildDataTable(true));
+                    isDataLoaded = true;
+                    btnBack.setVisible(true);
+                }
             }
             @Override
             public void failed(Throwable t) {
                 System.out.println("Failed " + t.getMessage());
-                dataTableCell.setActor(buildDataTable(false));
             }
 
             @Override
@@ -306,11 +360,9 @@ public class HistoryScreen implements Screen {
         btnBack.setVisible(false);
     }
 
-    private void storeExercisesAndTotalPages(String result) {
-        JsonValue json = new JsonReader().parse(result);
-        exercisesJson = json.get("exercises");
-        totalPages = json.getInt("total_pages");
-
+    private void storeExercisesAndTotalPages(JsonValue ejercicios) {
+        exercisesJson = ejercicios;
+        totalPages = exercisesJson.size > ROWS_PER_PAGE ? currentPage + 1 : currentPage;
     }
 
     private String parseTimeStampString(String timestamp) {
@@ -329,11 +381,14 @@ public class HistoryScreen implements Screen {
             table.add(new Label("OBSTÁCULOS", emgoneSkin, "history-header")).expandX().padBottom(15);
             table.add(new Label("FECHA", emgoneSkin, "history-header")).expandX().padBottom(15).row();
 
+            int i = 0;
             for (JsonValue exerciseJson : exercisesJson.iterator()) {
-                table.add(new Label(exerciseJson.getString("kind").equals("exercise") ? "Práctica" : "Juego", emgoneSkin, "history-data")).pad(10);
-                table.add(new Label("" + exerciseJson.getInt("dodged"), emgoneSkin, "history-data")).pad(10);
-                table.add(new Label("" + (exerciseJson.getInt("dodged") + exerciseJson.getInt("collisions")), emgoneSkin, "history-data")).pad(10);
-                table.add(new Label(parseTimeStampString(exerciseJson.getString("created_at")), emgoneSkin, "history-data")).pad(10).row();
+                if (i == ROWS_PER_PAGE) break;
+                table.add(new Label(exerciseJson.getString("tipo"), emgoneSkin, "history-data")).pad(10);
+                table.add(new Label("" + exerciseJson.getInt("esquivados"), emgoneSkin, "history-data")).pad(10);
+                table.add(new Label("" + (exerciseJson.getInt("esquivados") + exerciseJson.getInt("colisionados")), emgoneSkin, "history-data")).pad(10);
+                table.add(new Label(parseTimeStampString(exerciseJson.getString("createdAt")), emgoneSkin, "history-data")).pad(10).row();
+                i++;
             }
 
             btnPreviousPage.setVisible(currentPage > 1);

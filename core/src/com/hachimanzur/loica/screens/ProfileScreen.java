@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -20,11 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.util.GamePreferences;
-import com.hachimanzur.loica.util.UserData;
-import com.hachimanzur.loica.main.MainGame;
-import com.hachimanzur.loica.util.Gamification.Gamification;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
+import com.nursoft.emgone.util.GamePreferences;
+import com.nursoft.emgone.util.Gamification.Gamification;
+import com.nursoft.emgone.util.UserData;
 
 public class ProfileScreen implements Screen {
 
@@ -35,10 +35,10 @@ public class ProfileScreen implements Screen {
     private TextButton btnToMenu;
     private ImageButton btnEdit;
 
-    private com.hachimanzur.loica.util.UserData userData;
+    private UserData userData;
 
 
-    private com.hachimanzur.loica.util.GamePreferences prefs = com.hachimanzur.loica.util.GamePreferences.instance;
+    private GamePreferences prefs = GamePreferences.instance;
     private int currentScore;
     private int currentLevel;
 
@@ -48,13 +48,13 @@ public class ProfileScreen implements Screen {
 
     private Label lblNivel;
     private Label lblScore;
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
     private Skin emgoneSkin;
     private Skin emgoneImages;
 
     public ProfileScreen(MainGame game){
         this.game = game;
-        userData = new com.hachimanzur.loica.util.UserData();
+        userData = new UserData();
         userData.load();
     }
 
@@ -67,7 +67,7 @@ public class ProfileScreen implements Screen {
         stage.draw();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
-            game.setScreen(new com.hachimanzur.loica.screens.InitialScreen(game));
+            game.setScreen(new InitialScreen(game));
         }
     }
 
@@ -100,7 +100,7 @@ public class ProfileScreen implements Screen {
 
     }
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(true);
         loadSettings();
@@ -109,11 +109,11 @@ public class ProfileScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS_2));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS_2));
 
         Table layerBackground = buildBackgroundLayer();
         Table layerControlButtons = buildControlsLayer();
@@ -125,7 +125,7 @@ public class ProfileScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControlButtons);
         stack.add(layerResetConfirmationWindow);
@@ -142,7 +142,7 @@ public class ProfileScreen implements Screen {
     private Table buildBackgroundLayer() {
         Table layer = new Table();
         imgBackground = new Image(emgoneImages, "purple-bg");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
 
         return layer;
     }
@@ -165,7 +165,7 @@ public class ProfileScreen implements Screen {
         btnToMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new com.hachimanzur.loica.screens.InitialScreen(game));
+                game.setScreen(new InitialScreen(game));
             }
         });
         layer.add(btnEdit).right().row();
@@ -185,11 +185,11 @@ public class ProfileScreen implements Screen {
         layer.add(lblScore).expandX().width(130).row();
 
         Label nameField = new Label(userData.name.toUpperCase(), emgoneSkin, "big-title");
-        layer.add(nameField).colspan(3).height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.1f).row();
+        layer.add(nameField).colspan(3).height(Constants.VIEWPORT_HEIGHT*0.1f).row();
         nameField.getStyle().fontColor = Color.WHITE;
         nameField.setAlignment(Align.center);
 
-        layer.add(buildProfileInfoWindow()).colspan(3).top().height(com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT*0.4f).row();
+        layer.add(buildProfileInfoWindow()).colspan(3).top().height(Constants.VIEWPORT_HEIGHT*0.4f).row();
 
         TextButton btnSignOut = new TextButton("CERRAR SESIÓN", emgoneSkin, "btn-black");
         layer.add(btnSignOut).expand().bottom().colspan(3).row();
@@ -235,7 +235,7 @@ public class ProfileScreen implements Screen {
 
         TextButton btnExRecord= new TextButton("HISTORIAL DE EJERCICIOS", emgoneSkin, "profile-btn");
         btnExRecord.getLabel().setAlignment(Align.left);
-        windowProfile.add(btnExRecord).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH*0.65f).padBottom(50).row();
+        windowProfile.add(btnExRecord).width(Constants.VIEWPORT_WIDTH*0.65f).padBottom(50).row();
         btnExRecord.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -282,8 +282,8 @@ public class ProfileScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 prefs.score = 0;
                 prefs.level = 0;
-                prefs.costume = com.hachimanzur.loica.util.Constants.NORMAL_LOICA;
-                prefs.scenario = com.hachimanzur.loica.util.Constants.DESERT;
+                prefs.costume = Constants.NORMAL_LOICA;
+                prefs.scenario = Constants.DESERT;
                 prefs.save();
                 resetAchievementsOnServer();
                 game.setScreen(new InitialScreen(game));
@@ -304,9 +304,9 @@ public class ProfileScreen implements Screen {
 
     private void resetAchievementsOnServer() {
         Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.DELETE);
-        request.setUrl(com.hachimanzur.loica.util.Constants.POST_ACHIEVEMENTS_URL);
+        request.setUrl(Constants.POST_ACHIEVEMENTS_URL);
         request.setHeader("Content-Type", "application/json");
-        request.setHeader("Authorization", "Token token=" + com.hachimanzur.loica.util.UserData.getToken());
+        request.setHeader("Authorization", "Token token=" + UserData.getToken());
         request.setTimeOut(Constants.TIMEOUT);
 
         Net.HttpResponseListener listener = new Net.HttpResponseListener() {

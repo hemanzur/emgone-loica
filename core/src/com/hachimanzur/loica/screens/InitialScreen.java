@@ -1,4 +1,4 @@
-package com.hachimanzur.loica.screens;
+package com.nursoft.emgone.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,8 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.hachimanzur.loica.util.Constants;
-import com.hachimanzur.loica.main.MainGame;
+import com.nursoft.emgone.main.MainGame;
+import com.nursoft.emgone.util.Constants;
 
 
 public class InitialScreen implements Screen {
@@ -30,7 +30,7 @@ public class InitialScreen implements Screen {
 
     private TextButton btnGoToProfile;
 
-    public com.hachimanzur.loica.main.MainGame game;
+    public MainGame game;
 
     public InitialScreen(MainGame game){
         this.game = game;
@@ -75,7 +75,7 @@ public class InitialScreen implements Screen {
     }
 
     public void show() {
-        stage = new Stage(new FitViewport(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT));
+        stage = new Stage(new FitViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         Gdx.input.setCatchBackKey(false);
         rebuildStage();
@@ -83,11 +83,11 @@ public class InitialScreen implements Screen {
 
     private void rebuildStage() {
         emgoneSkin = new Skin(
-                Gdx.files.internal(com.hachimanzur.loica.util.Constants.EMGONE_SKIN),
-                new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_ATLAS)
+                Gdx.files.internal(Constants.EMGONE_SKIN),
+                new TextureAtlas(Constants.EMGONE_ATLAS)
         );
 
-        emgoneImages = new Skin(new TextureAtlas(com.hachimanzur.loica.util.Constants.EMGONE_IMAGES_ATLAS_2));
+        emgoneImages = new Skin(new TextureAtlas(Constants.EMGONE_IMAGES_ATLAS_2));
 
         Table layerBackground = buildBackgroundLayer();
         Table layerControlButtons = buildControlsLayer();
@@ -96,7 +96,7 @@ public class InitialScreen implements Screen {
         stage.clear();
         Stack stack = new Stack();
         stage.addActor(stack);
-        stack.setSize(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH, com.hachimanzur.loica.util.Constants.VIEWPORT_HEIGHT);
+        stack.setSize(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         stack.add(layerBackground);
         stack.add(layerControlButtons);
     }
@@ -105,7 +105,7 @@ public class InitialScreen implements Screen {
         Table layer = new Table();
         Image imgBackground = new Image(emgoneImages, "orange-bg");
         Image imgBackgroundBottom = new Image(emgoneImages, "orange-bg-mountains");
-        layer.add(imgBackground).width(com.hachimanzur.loica.util.Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
+        layer.add(imgBackground).width(Constants.VIEWPORT_WIDTH).height(Constants.VIEWPORT_HEIGHT);
         layer.addActor(imgBackgroundBottom);
         imgBackgroundBottom.setSize(stage.getWidth(), stage.getHeight()/6);
         return layer;

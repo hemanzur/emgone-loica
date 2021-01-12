@@ -1,18 +1,20 @@
-package com.hachimanzur.loica.util;
+package com.nursoft.emgone.util;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.hachimanzur.loica.util.Gamification.Gamification;
+import com.nursoft.emgone.screens.PreLoginScreen;
+import com.nursoft.emgone.util.Gamification.Gamification;
 
 public class UserData {
     // TO DO pls refactor dis
-    int id;
+    private String id;
     public String email;
     public String name;
     public String phone;
     public String rut;
     public String address;
-    String token;
+    private String token;
     private String password;
     public int score;
 
@@ -22,35 +24,63 @@ public class UserData {
 
     }
 
-    public UserData(String n, String r, String ph, String e, String a, String p, String t, int score) {
-        name = n;
-        rut = r;
-        phone = ph;
-        email = e;
-        address = a;
-        password = p;
-        token = t;
-        this.score = score;
+    public UserData(String id,
+                    String name,
+                    String phone,
+                    String email,
+                    String address,
+                    String jwt) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.token = jwt;
     }
 
-    public UserData(String n, String r, String ph, String e, String a, String p, String t) {
-        name = n;
-        rut = r;
-        phone = ph;
-        email = e;
-        address = a;
-        password = p;
-        token = t;
+    public UserData(String id,
+                    String name,
+                    String phone,
+                    String email,
+                    String address,
+                    int score,
+                    String jwt) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.score = score;
+        this.token = jwt;
+    }
+
+    public UserData(String id,
+                    String name,
+                    String phone,
+                    String email,
+                    String address,
+                    int score,
+                    String jwt,
+                    String password) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.score = score;
+        this.token = jwt;
+        this.password = password;
     }
 
     public void save() {
-        file.putInteger("id", id);
+        file.putString("id", id);
         file.putString("email", email);
         file.putString("name", name);
         file.putString("phone", phone);
         file.putString("rut", rut);
         file.putString("address", address);
         file.putString("token", token);
+        file.putString("password", password);
         file.putBoolean("loggedIn", true);
         file.flush();
 
@@ -66,13 +96,19 @@ public class UserData {
         return file.getString("token");
     }
 
+    public static String getId() {  return file.getString("id"); }
+
+    public static String getEmail() {  return file.getString("email"); }
+
+    public static String getPassword() {  return file.getString("password"); }
+
     public static void setToken(String token) {
         file.putString("token", token);
         file.flush();
     }
 
     public void load() {
-        id = file.getInteger("id");
+        id = file.getString("id");
         email = file.getString("email");
         name = file.getString("name");
         phone = file.getString("phone");
@@ -86,7 +122,7 @@ public class UserData {
     }
 
     public static void resetData() {
-        file.putInteger("id", -1);
+        file.putString("id", "");
         file.putString("email", "");
         file.putString("name", "");
         file.putString("phone", "");
