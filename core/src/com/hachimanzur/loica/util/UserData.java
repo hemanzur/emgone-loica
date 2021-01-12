@@ -1,10 +1,10 @@
-package com.nursoft.emgone.util;
+package com.hachimanzur.loica.util;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.nursoft.emgone.screens.PreLoginScreen;
-import com.nursoft.emgone.util.Gamification.Gamification;
+import com.hachimanzur.loica.screens.PreLoginScreen;
+import com.hachimanzur.loica.util.Gamification.Gamification;
 
 public class UserData {
     // TO DO pls refactor dis

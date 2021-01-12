@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 
 import com.badlogic.gdx.Gdx;
@@ -21,28 +21,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.loicas.AbstractLoicaCostume;
-import com.nursoft.emgone.loicas.NormalLoica;
-import com.nursoft.emgone.loicas.QueenLoica;
-import com.nursoft.emgone.loicas.SpartanLoica;
-import com.nursoft.emgone.loicas.SuperLoica;
-import com.nursoft.emgone.loicas.WizardLoica;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.stages.AbstractEMGStage;
-import com.nursoft.emgone.stages.CityStage;
-import com.nursoft.emgone.stages.DesertStage;
-import com.nursoft.emgone.stages.ForestStage;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.GamePreferences;
-import com.nursoft.emgone.util.Gamification.Achievements.Achievement;
-import com.nursoft.emgone.util.Gamification.Gamification;
+import com.hachimanzur.loica.loicas.AbstractLoicaCostume;
+import com.hachimanzur.loica.loicas.NormalLoica;
+import com.hachimanzur.loica.loicas.QueenLoica;
+import com.hachimanzur.loica.loicas.SpartanLoica;
+import com.hachimanzur.loica.loicas.SuperLoica;
+import com.hachimanzur.loica.loicas.WizardLoica;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.stages.AbstractEMGStage;
+import com.hachimanzur.loica.stages.CityStage;
+import com.hachimanzur.loica.stages.DesertStage;
+import com.hachimanzur.loica.stages.ForestStage;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.GamePreferences;
+import com.hachimanzur.loica.util.Gamification.Achievements.Achievement;
+import com.hachimanzur.loica.util.Gamification.Gamification;
 
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.CITY;
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.FOREST;
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.QUEEN;
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.SPARTAN;
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.SUPER;
-import static com.nursoft.emgone.util.Gamification.Achievements.Achievement.Available.WIZARD;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.CITY;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.FOREST;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.QUEEN;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.SPARTAN;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.SUPER;
+import static com.hachimanzur.loica.util.Gamification.Achievements.Achievement.Available.WIZARD;
 
 public class CustomizationScreen implements Screen {
 

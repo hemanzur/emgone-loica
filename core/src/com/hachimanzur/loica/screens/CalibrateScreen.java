@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 
 import com.badlogic.gdx.Gdx;
@@ -28,9 +28,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.GamePreferences;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.GamePreferences;
 
 
 public class CalibrateScreen implements Screen {

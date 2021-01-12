@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,8 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
 
 
 public class InitialScreen implements Screen {

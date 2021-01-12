@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -27,11 +27,11 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.GamePreferences;
-import com.nursoft.emgone.util.Gamification.Gamification;
-import com.nursoft.emgone.util.UserData;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.GamePreferences;
+import com.hachimanzur.loica.util.Gamification.Gamification;
+import com.hachimanzur.loica.util.UserData;
 
 
 public class HistoryScreen implements Screen {

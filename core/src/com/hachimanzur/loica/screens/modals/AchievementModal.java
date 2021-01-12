@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens.modals;
+package com.hachimanzur.loica.screens.modals;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.nursoft.emgone.util.Gamification.Achievements.Achievement;
+import com.hachimanzur.loica.util.Gamification.Achievements.Achievement;
 
 
 public class AchievementModal extends AbstractModal {

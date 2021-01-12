@@ -62,7 +62,9 @@ public class UserAchievements {
     }
 
     public void getAchievementsFromServer() {
-        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
+        // TODO: Fix achivements in new app
+        return;
+/*        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
         request.setUrl(Constants.ACHIEVEMENTS_PAGE_URL+0);
         request.setHeader("Content-Type", "application/json");
         request.setHeader("Authorization", "Token token=" + UserData.getToken());
@@ -88,7 +90,7 @@ public class UserAchievements {
             }
         };
 
-        Gdx.net.sendHttpRequest(request, listener);
+        Gdx.net.sendHttpRequest(request, listener);*/
     }
 
     private void storeAchievementsFromResponse(String response) {
@@ -221,7 +223,9 @@ public class UserAchievements {
     }
 
     public void sendAchievementsToServer() {
-        Json json = new Json();
+        //TODO: Fix new app
+        return;
+        /*Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
 
         Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
@@ -286,7 +290,7 @@ public class UserAchievements {
             }
         };
 
-        Gdx.net.sendHttpRequest(request, listener);
+        Gdx.net.sendHttpRequest(request, listener);*/
 
 
     }

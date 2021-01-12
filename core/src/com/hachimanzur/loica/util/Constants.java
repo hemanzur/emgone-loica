@@ -1,4 +1,4 @@
-package com.nursoft.emgone.util;
+package com.hachimanzur.loica.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -27,9 +27,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.UserData;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.UserData;
 
 import java.io.InputStream;
 import java.util.regex.Pattern;

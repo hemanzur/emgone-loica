@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -24,8 +24,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.screens.LoginScreen;
 
 import java.util.regex.Pattern;
 
@@ -342,7 +343,7 @@ public class RegisterScreen implements Screen {
     private void postCredentials(String name, String rut, String phone, String email, String address, String password) {
         // TODO: Connect post credentials to new app endpoint
         return;
-        Json json = new Json();
+        /*Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
 
         User user = new User(name, rut, phone, email, address, password);
@@ -382,7 +383,7 @@ public class RegisterScreen implements Screen {
         Gdx.net.sendHttpRequest(request, listener);
         btnRegister.setVisible(false);
         mainLblCell.setActor(registerLbl);
-        btnCell.setActor(feedBackMsg);
+        btnCell.setActor(feedBackMsg);*/
     }
 
     private void refuse(int statusCode){

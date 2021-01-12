@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -23,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
 
 import java.util.regex.Pattern;
 
@@ -217,7 +217,9 @@ public class RecoverScreen implements Screen {
     }
 
     private void sendRecoveryMail(String email) {
-        HttpRequest request = new HttpRequest(HttpMethods.POST);
+        // TODO: fix send recovery to new app
+        return;
+/*        HttpRequest request = new HttpRequest(HttpMethods.POST);
         request.setUrl(Constants.RECOVERY_URL);
         request.setContent("{" +
                 "\"user\": {" +
@@ -257,7 +259,7 @@ public class RecoverScreen implements Screen {
 
         Gdx.net.sendHttpRequest(request, listener);
         lblRecover.setText("Enviando solicitud...");
-        cellLabel.setActor(lblRecover);
+        cellLabel.setActor(lblRecover);*/
     }
 
     private void refuse(int statusCode) {

@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -31,19 +31,19 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.loicas.AbstractLoicaCostume;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.screens.modals.AchievementModal;
-import com.nursoft.emgone.screens.modals.GameOverModal;
-import com.nursoft.emgone.stages.AbstractEMGStage;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.GamePreferences;
-import com.nursoft.emgone.util.Gamification.Achievements.Achievement;
-import com.nursoft.emgone.util.Gamification.Achievements.UserAchievements;
-import com.nursoft.emgone.util.Gamification.Gamification;
-import com.nursoft.emgone.util.MicProcessor;
-import com.nursoft.emgone.util.Obstacle;
-import com.nursoft.emgone.util.UserData;
+import com.hachimanzur.loica.loicas.AbstractLoicaCostume;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.screens.modals.AchievementModal;
+import com.hachimanzur.loica.screens.modals.GameOverModal;
+import com.hachimanzur.loica.stages.AbstractEMGStage;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.GamePreferences;
+import com.hachimanzur.loica.util.Gamification.Achievements.Achievement;
+import com.hachimanzur.loica.util.Gamification.Achievements.UserAchievements;
+import com.hachimanzur.loica.util.Gamification.Gamification;
+import com.hachimanzur.loica.util.MicProcessor;
+import com.hachimanzur.loica.util.Obstacle;
+import com.hachimanzur.loica.util.UserData;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

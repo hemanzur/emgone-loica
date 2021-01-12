@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens.modals;
+package com.hachimanzur.loica.screens.modals;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.nursoft.emgone.util.Constants;
+import com.hachimanzur.loica.util.Constants;
 
 
 public class GameOverModal extends AbstractModal {

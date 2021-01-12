@@ -1,4 +1,4 @@
-package com.nursoft.emgone.screens;
+package com.hachimanzur.loica.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -26,11 +26,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.nursoft.emgone.main.MainGame;
-import com.nursoft.emgone.util.Constants;
-import com.nursoft.emgone.util.GamePreferences;
-import com.nursoft.emgone.util.Gamification.Gamification;
-import com.nursoft.emgone.util.UserData;
+import com.hachimanzur.loica.main.MainGame;
+import com.hachimanzur.loica.util.Constants;
+import com.hachimanzur.loica.util.GamePreferences;
+import com.hachimanzur.loica.util.Gamification.Gamification;
+import com.hachimanzur.loica.util.UserData;
 
 
 public class AchievementsScreen implements Screen {
@@ -285,7 +285,9 @@ public class AchievementsScreen implements Screen {
     }
 
     private void getAchievementsFromPage(int page) {
-        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
+        // TODO: fix get achievemnts with new URL
+        return;
+        /*Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.GET);
         request.setUrl(Constants.ACHIEVEMENTS_PAGE_URL+page);
         request.setHeader("Content-Type", "application/json");
         request.setHeader("Authorization", "Token token=" + UserData.getToken());
@@ -318,7 +320,7 @@ public class AchievementsScreen implements Screen {
         Gdx.net.sendHttpRequest(request, listener);
         dataTableCell.setActor(lblError);
         lblError.setText("Cargando datos...");
-        btnBack.setVisible(false);
+        btnBack.setVisible(false);*/
     }
 
     private void storeAchievementsAndTotalPages(String result) {
