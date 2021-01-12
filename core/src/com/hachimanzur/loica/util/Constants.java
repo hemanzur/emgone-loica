@@ -28,22 +28,16 @@ public class Constants {
     public static final float CALIBRATION_ENABLE_TIME = 3.0f;
 
     // endpoints
-    // private static final String HOST = BuildConfig.HOST;
-
     //FIXME: AUTOMATIZAR DEPENDIENDO DEL TIPO DE BUILD QUE SE REALIZA
-    //private static final String HOST = "http://emgone.dev.nursoft.cl";
-    private static final String HOST = "http://emgone.cl";
-    private static final String PORT = "80";
-
-    //public static final String LOGIN_URL = HOST + ":" + PORT + "/api/v1/users/sessions";
-    //public static final String EDIT_PROFILE_URL = HOST + ":" + PORT + "/api/v1/users/me";
-    //public static final String POST_GAME_DATA_URL = HOST + ":" + PORT + "/api/v1/exercises";
-    //public static final String EXERCISES_PAGE_URL = HOST + ":" + PORT + "/api/v1/exercises?page=";
+    // private static final String HOST = BuildConfig.HOST;
+    // Compsci app endpoint
     public static final String GRAPHQL_URL = "https://compsci.cl/emg-one/graphql";
-    public static final String REGISTER_URL = HOST + ":" + PORT + "/api/v1/users";
-    public static final String RECOVERY_URL = HOST + ":" + PORT + "/api/v1/users/me/recovery";
-    public static final String ACHIEVEMENTS_PAGE_URL = HOST + ":" + PORT + "/api/v1/achievements?page=";
-    public static final String POST_ACHIEVEMENTS_URL = HOST + ":" + PORT + "/api/v1/achievements";
+    // private static final String HOST = "http://emgone.cl";
+    // private static final String PORT = "80";
+    // public static final String REGISTER_URL = HOST + ":" + PORT + "/api/v1/users";
+    // public static final String RECOVERY_URL = HOST + ":" + PORT + "/api/v1/users/me/recovery";
+    // public static final String ACHIEVEMENTS_PAGE_URL = HOST + ":" + PORT + "/api/v1/achievements?page=";
+    // public static final String POST_ACHIEVEMENTS_URL = HOST + ":" + PORT + "/api/v1/achievements";
 
     public static final int TIMEOUT = 15000;
     // error handlers
