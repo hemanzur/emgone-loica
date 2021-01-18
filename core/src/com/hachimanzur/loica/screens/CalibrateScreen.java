@@ -316,9 +316,9 @@ public class CalibrateScreen implements Screen {
         page.add(new Label("Normal", emgoneSkin, "slider-knob-title")).uniform();
         page.add(new Label("Grande", emgoneSkin, "slider-knob-title")).uniform();
         page.row().padBottom(padBottom);
-        page.add(new Label("50 cm", emgoneSkin, "slider-knob-description")).uniform();
-        page.add(new Label("125 cm", emgoneSkin, "slider-knob-description")).uniform();
-        page.add(new Label("200 cm", emgoneSkin, "slider-knob-description")).uniform();
+//        page.add(new Label("50 cm", emgoneSkin, "slider-knob-description")).uniform();
+//        page.add(new Label("125 cm", emgoneSkin, "slider-knob-description")).uniform();
+//        page.add(new Label("200 cm", emgoneSkin, "slider-knob-description")).uniform();
 
         return page;
     }

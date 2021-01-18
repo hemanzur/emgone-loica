@@ -31,7 +31,8 @@ public class Constants {
     //FIXME: AUTOMATIZAR DEPENDIENDO DEL TIPO DE BUILD QUE SE REALIZA
     // private static final String HOST = BuildConfig.HOST;
     // Compsci app endpoint
-    public static final String GRAPHQL_URL = "https://compsci.cl/emg-one/graphql";
+    //public static final String GRAPHQL_URL = "https://compsci.cl/emg-one/graphql";
+    public static final String GRAPHQL_URL = "https://emgone.cl/graphql";
     // Deprecated Nursoft endpoints
     // private static final String HOST = "http://emgone.cl";
     // private static final String PORT = "80";
