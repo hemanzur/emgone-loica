@@ -21,9 +21,12 @@ public final class Gamification {
     }
 
     public static int getCurrentLevel() {
-        // return 1;
         int score = prefs.score;
         return getCurrentLevel(score);
+    }
+
+    public static int getCurrentScore() {
+        return prefs.score;
     }
 
     public static int getCurrentLevel(int score) {

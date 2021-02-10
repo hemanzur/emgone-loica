@@ -132,7 +132,8 @@ public class LoginScreen implements Screen {
                     "      nombre, " +
                     "      telefono, " +
                     "      email, " +
-                    "      direccion " +
+                    "      direccion, " +
+                    "      score " +
                     "    }" +
                     "  }";
             variables = " { \"id\": \""+ id + "\" }";
@@ -343,7 +344,12 @@ public class LoginScreen implements Screen {
         String phone = data.getString("telefono");
         String email = data.getString("email");
         String address = data.getString("direccion");
-        int score = 1; //data.getString("score");
+        int score;
+        if (data.get("score").isNull()) {
+            score = 0;
+        } else {
+            score = Integer.parseInt(data.getString("score"));
+        }
         UserData u = new UserData(id, name, phone, email, address, score, user.jwt, user.password);
         return u;
     }

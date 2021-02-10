@@ -355,6 +355,7 @@ public class EmgOneGame implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         postExercise();
+                        postScore();
                         game.setScreen(new SummaryScreen(game, isPractice));
                     }
                 }
@@ -900,6 +901,80 @@ public class EmgOneGame implements Screen {
 
         ExerciseGraphql exerciseGraphql = prepareExercise(id);
         CreateExerciseGraphqlRequest contentRequest = new CreateExerciseGraphqlRequest(exerciseGraphql);
+        System.out.println(json.prettyPrint(contentRequest));
+        request.setContent(json.prettyPrint(contentRequest));
+        request.setHeader("Content-Type", "application/json");
+        request.setHeader("Authorization", bearer);
+        request.setTimeOut(Constants.TIMEOUT);
+
+        Net.HttpResponseListener listener = new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                int statusCode = httpResponse.getStatus().getStatusCode();
+                System.out.println("Status code " + httpResponse.getStatus().getStatusCode());
+                String responseString = httpResponse.getResultAsString();
+                JsonValue jsonResponse = new JsonReader().parse(responseString);
+                JsonValue data = jsonResponse.get("data");
+                System.out.println("Result: " + responseString);
+                if ( statusCode != 200 ) {
+                    System.out.println("Failed " );
+                }
+            }
+            @Override
+            public void failed(Throwable t) {
+                System.out.println("Failed " + t.getMessage());
+            }
+
+            @Override
+            public void cancelled() {
+                System.out.println("Cancelled");
+            }
+        };
+
+        Gdx.net.sendHttpRequest(request, listener);
+    }
+
+    class CreateScoreGraphqlRequest {
+        private String variables;
+        private String query;
+        private String operationName;
+
+        CreateScoreGraphqlRequest(String variables) {
+            operationName = "updateScore";
+            query = "  mutation updateScore (\n" +
+                    "    $id: ID!, $score: Int \n" +
+                    "  ) {\n" +
+                    "    updateUser (\n" +
+                    "      input: {\n" +
+                    "        where: { id: $id },\n" +
+                    "        data: { score: $score }\n" +
+                    "      }\n" +
+                    "    ) {\n" +
+                    "      user {\n" +
+                    "        id\n" +
+                    "        score\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }";
+            this.variables = variables;
+        }
+    }
+
+
+    private void postScore() {
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        String jwt = UserData.getToken();
+        String id = UserData.getId();
+        String bearer = "Bearer " + jwt;
+        Net.HttpRequest request = new Net.HttpRequest(Net.HttpMethods.POST);
+        request.setUrl(Constants.GRAPHQL_URL);
+        String scoreVariables = "" +
+                "{ " +
+                "   \"id\": \""+ id +"\",\n" +
+                "   \"score\": " + String.valueOf(Gamification.getCurrentScore())  +
+                "}";
+        CreateScoreGraphqlRequest contentRequest = new CreateScoreGraphqlRequest(scoreVariables);
         System.out.println(json.prettyPrint(contentRequest));
         request.setContent(json.prettyPrint(contentRequest));
         request.setHeader("Content-Type", "application/json");
